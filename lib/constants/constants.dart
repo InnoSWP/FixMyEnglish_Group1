@@ -1,0 +1,1 @@
+const logoPath = 'logo/logo.png';
