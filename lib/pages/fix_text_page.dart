@@ -2,6 +2,10 @@ import 'package:fix_my_english/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/mistake_sentence.dart';
+import '../widgets/app_bar.dart';
+import '../style/colors.dart';
+import '../widgets/my_button.dart';
+import '../models/simple_dialog.dart';
 
 class FixTextPage extends StatelessWidget {
   final TextEditingController? myController;
@@ -15,62 +19,89 @@ class FixTextPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color(0xFF4D6658),
-          title: Container(
-            alignment: Alignment.center,
-            child: const Image(
-              width: 200,
-              color: Colors.white,
-              image: AssetImage('logo/logo.png'),
-            ),
-          )),
+      appBar: getAppBar(),
       body: Row(
         children: [
           Expanded(
             flex: 2,
-            child: Container(
-              width: 300,
-              color: const Color(0xFFE9F1E8),
-              padding: const EdgeInsets.all(10),
-              // decoration: BoxDecoration(
-              //   border: Border.all(color: Colors.blueAccent),
-              // ),
-              child: Column(
-                children: const [
-                  MistakeSentence(text: 'some text with mistake'),
-                  MistakeSentence(text: 'some text with mistake'),
-                  MistakeSentence(text: 'some text with mistake'),
-                  MistakeSentence(text: 'some text with mistake'),
-                ],
-              ),
+            child: Stack(
+              children: [
+                Container(
+                  // alignment: Alignment.bottomLeft,
+                  width: double.infinity,
+                  color: colorSecondaryLightGreenPlant,
+                  // padding: const EdgeInsets.all(10),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(color: Colors.blueAccent),
+                  // ),
+                  child: ListView(
+                    children: const [
+                      MistakeSentence(
+                        text: 'some text with mistake1',
+                        error: 'mistake1',
+                        suggestion: 'sug1',
+                      ),
+                      MistakeSentence(
+                        text: 'some text with mistake2',
+                        error: 'mistake2',
+                        suggestion: 'sug2',
+                      ),
+                      MistakeSentence(
+                        text: 'some text with mistake3',
+                        error: 'mistake3',
+                        suggestion: 'sug3',
+                      ),
+                      MistakeSentence(
+                        text: 'some text with mistake4',
+                        error: 'mistake4',
+                        suggestion: 'sug4',
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MyButton(
+                      text: 'Extract',
+                      onPressed: () {
+                        showMyNotification(
+                          text: 'Extract button isn\'t working for now!',
+                          context: context,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: MyTextField(
-                    maxLines: 30,
+            flex: 1,
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  MyTextField(
+                    maxLines: 20,
                     myController: myController,
                     text: args,
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(2),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xFF4D6658)),
-                    minimumSize: MaterialStateProperty.all<Size>(
-                        const Size.fromHeight(50)),
+                  MyButton(
+                    text: 'Fix',
+                    onPressed: () {
+                      showMyNotification(
+                        text: 'fix button isn\'t working for now!',
+                        context: context,
+                      );
+                    },
                   ),
-                  child: const Text('Fix'),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],
