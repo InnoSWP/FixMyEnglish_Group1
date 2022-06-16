@@ -21,12 +21,10 @@ class MistakeSentence extends StatelessWidget {
       error: error,
       suggestion: suggestion,
     );
-    return Row(
-      // crossAxisAlignment: CrossAxisAlignment.center,
+    return Wrap(
       children: [
-        ...l.map((e) => Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 15, bottom: 15, left: 20),
+        ...l.map((e) => Padding(
+              padding: const EdgeInsets.only(top: 15, bottom: 15),
               child: e,
             ))
       ],
