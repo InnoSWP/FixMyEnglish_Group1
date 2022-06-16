@@ -47,7 +47,22 @@ List<Widget> getSentence({
         style: mistakeSentence,
       ),
     ));
-    start = index + 1;
+
+    // sentences.add(
+    //   Text(
+    //     error,
+    //     style: mistakeSentence,
+    //     overflow: TextOverflow.ellipsis,
+    //   ),
+    // );
+
+    start = index + (error.length as int);
+  }
+  if (start < text.length) {
+    sentences.add(Text(
+      text.substring(start),
+      style: allSentence,
+    ));
   }
   return sentences;
 }
