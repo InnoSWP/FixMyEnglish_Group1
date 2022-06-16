@@ -6,18 +6,39 @@ import '../widgets/app_bar.dart';
 import '../style/colors.dart';
 import '../widgets/my_button.dart';
 import '../models/simple_dialog.dart';
+import '../api/api.dart';
+import '../models/controller.dart';
+import '../models/sentence.dart';
 
-class FixTextPage extends StatelessWidget {
-  final TextEditingController? myController;
-  const FixTextPage({super.key, this.myController});
+class FixTextPage extends StatefulWidget {
+  static const pageName = '/fix_text';
+
+  // late MyController? myController;
+  const FixTextPage({super.key});
+
+  @override
+  State<FixTextPage> createState() => _FixTextPageState();
+}
+
+class _FixTextPageState extends State<FixTextPage> {
+  static final _sentences = [];
+
+  void _addSentences(Sentence s) {
+    setState(() {
+      _sentences.add(MistakeSentence(
+        text: s.text,
+        suggestion: s.suggestion,
+        error: s.error,
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var args = '';
-    if (ModalRoute.of(context)!.settings.arguments != null) {
-      args = ModalRoute.of(context)!.settings.arguments as String;
+    var args = MyController(TextEditingController(text: ''));
+    if (ModalRoute.of(context)?.settings.arguments != null) {
+      args = ModalRoute.of(context)!.settings.arguments as MyController;
     }
-
     return Scaffold(
       appBar: getAppBar(),
       body: Row(
@@ -34,29 +55,19 @@ class FixTextPage extends StatelessWidget {
                   // decoration: BoxDecoration(
                   //   border: Border.all(color: Colors.blueAccent),
                   // ),
-                  child: ListView(
-                    children: const [
-                      MistakeSentence(
-                        text: 'some text with mistake1',
-                        error: 'mistake1',
-                        suggestion: 'sug1',
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black38),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5.0)),
                       ),
-                      MistakeSentence(
-                        text: 'some text with mistake2',
-                        error: 'mistake2',
-                        suggestion: 'sug2',
-                      ),
-                      MistakeSentence(
-                        text: 'some text with mistake3',
-                        error: 'mistake3',
-                        suggestion: 'sug3',
-                      ),
-                      MistakeSentence(
-                        text: 'some text with mistake4',
-                        error: 'mistake4',
-                        suggestion: 'sug4',
-                      ),
-                    ],
+                      margin: const EdgeInsets.only(
+                          left: 13, right: 13, bottom: 13),
+                      padding: const EdgeInsets.only(left: 15),
+                      child: _sentences[index],
+                    ),
+                    itemCount: _sentences.length,
                   ),
                 ),
                 Align(
@@ -87,18 +98,30 @@ class FixTextPage extends StatelessWidget {
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   MyTextField(
-                    maxLines: 20,
-                    myController: myController,
-                    text: args,
+                    maxLines: 50,
+                    myController: args,
+                    text: args.controller.text,
                   ),
-                  MyButton(
-                    text: 'Fix',
-                    onPressed: () {
-                      showMyNotification(
-                        text: 'fix button isn\'t working for now!',
-                        context: context,
-                      );
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MyButton(
+                      text: 'Fix',
+                      onPressed: () {
+                        setState(() {
+                          _sentences.clear();
+                        });
+                        postText(
+                          text: args.controller.text,
+                          context: context,
+                        ).then((l) {
+                          if (l.isEmpty) {
+                            showMyNotification(
+                                context: context, text: 'No mistakes found!');
+                          }
+                          l.forEach(_addSentences);
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
