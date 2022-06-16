@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import './colors.dart';
 
 const TextStyle mistakeSentence = TextStyle(
-  // backgroundColor: customRed,
   color: customRed,
   fontSize: 24,
+  overflow: TextOverflow.visible,
 );
 
 const TextStyle allSentence = TextStyle(
-  backgroundColor: customBlack,
+  color: customBlack,
   fontSize: 20,
-  overflow: TextOverflow.ellipsis,
+  overflow: TextOverflow.visible,
 );
 
 const BoxDecoration suggestionDecoration = BoxDecoration(
@@ -21,7 +21,7 @@ const BoxDecoration suggestionDecoration = BoxDecoration(
 
 // file info text style
 const TextStyle fileInfoStyle = TextStyle(
-  backgroundColor: customBlack,
+  color: customBlack,
   fontSize: 24,
   overflow: TextOverflow.ellipsis,
 );
