@@ -13,7 +13,7 @@ const colorSecondaryLightGreenPlant = Color(0xFFE9F1E8);
 const customRed = Color.fromARGB(255, 255, 17, 0);
 
 // black color for all sentence
-const customBlack = Color.fromARGB(8, 0, 0, 0);
+const customBlack = Color.fromARGB(255, 0, 0, 0);
 
 // background color of suggestion box
 const customBlue = Color.fromARGB(255, 174, 211, 241);
