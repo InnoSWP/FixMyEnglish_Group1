@@ -8,6 +8,8 @@ import '../widgets/my_button.dart';
 import '../models/simple_dialog.dart';
 
 class UploadFilePage extends StatefulWidget {
+  static const pageName = '/upload_file';
+
   const UploadFilePage({super.key});
 
   @override
@@ -15,6 +17,29 @@ class UploadFilePage extends StatefulWidget {
 }
 
 class _UploadFilePageState extends State<UploadFilePage> {
+  final _sentences = const [
+    MistakeSentence(
+      text: 'some text with mistake1',
+      error: 'mistake1',
+      suggestion: 'sug1',
+    ),
+    MistakeSentence(
+      text: 'some text with mistake2',
+      error: 'mistake2',
+      suggestion: 'sug2',
+    ),
+    MistakeSentence(
+      text: 'some text with mistake3',
+      error: 'mistake3',
+      suggestion: 'sug3',
+    ),
+    MistakeSentence(
+      text: 'some text with mistake4',
+      error: 'mistake4',
+      suggestion: 'sug4',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,29 +53,19 @@ class _UploadFilePageState extends State<UploadFilePage> {
                 Container(
                   width: double.infinity,
                   color: colorSecondaryLightGreenPlant,
-                  child: ListView(
-                    children: const [
-                      MistakeSentence(
-                        text: 'some text with mistake1',
-                        error: 'mistake1',
-                        suggestion: 'sug1',
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black38),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5.0)),
                       ),
-                      MistakeSentence(
-                        text: 'some text with mistake2',
-                        error: 'mistake2',
-                        suggestion: 'sug2',
-                      ),
-                      MistakeSentence(
-                        text: 'some text with mistake3',
-                        error: 'mistake3',
-                        suggestion: 'sug3',
-                      ),
-                      MistakeSentence(
-                        text: 'some text with mistake4',
-                        error: 'mistake4',
-                        suggestion: 'sug4',
-                      ),
-                    ],
+                      margin: const EdgeInsets.only(
+                          left: 13, right: 13, bottom: 13),
+                      padding: const EdgeInsets.only(left: 15),
+                      child: _sentences[index],
+                    ),
+                    itemCount: _sentences.length,
                   ),
                 ),
                 Align(
@@ -79,7 +94,6 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   const Expanded(
                     child: FileListView(),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MyButton(
