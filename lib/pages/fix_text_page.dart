@@ -6,7 +6,7 @@ import '../widgets/app_bar.dart';
 import '../style/colors.dart';
 import '../widgets/my_button.dart';
 import '../models/simple_dialog.dart';
-import '../api/api.dart';
+import '../services/api_service.dart';
 import '../models/controller.dart';
 import '../models/sentence.dart';
 
@@ -64,7 +64,7 @@ class _FixTextPageState extends State<FixTextPage> {
                       ),
                       margin: const EdgeInsets.only(
                           left: 13, right: 13, bottom: 13),
-                      padding: const EdgeInsets.only(left: 15),
+                      padding: const EdgeInsets.only(left: 15, top: 13),
                       child: _sentences[index],
                     ),
                     itemCount: _sentences.length,
@@ -114,10 +114,6 @@ class _FixTextPageState extends State<FixTextPage> {
                           text: args.controller.text,
                           context: context,
                         ).then((l) {
-                          if (l.isEmpty) {
-                            showMyNotification(
-                                context: context, text: 'No mistakes found!');
-                          }
                           l.forEach(_addSentences);
                         });
                       },
