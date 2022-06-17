@@ -4,7 +4,7 @@ import './colors.dart';
 
 const TextStyle mistakeSentence = TextStyle(
   color: customRed,
-  fontSize: 24,
+  fontSize: 20,
   overflow: TextOverflow.visible,
 );
 
