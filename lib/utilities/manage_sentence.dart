@@ -16,9 +16,14 @@ List<Widget> getSentence({
       padding: const EdgeInsets.all(10),
       textStyle: allSentence,
       decoration: suggestionDecoration,
-      child: Text(
-        text,
-        style: mistakeSentence,
+      child: Wrap(
+        children: [
+          ...splitSentence(
+            text: text,
+            style: mistakeSentence,
+            space: false,
+          ),
+        ],
       ),
     ));
     return sentences;
@@ -31,10 +36,14 @@ List<Widget> getSentence({
     if (index == -1) {
       break;
     }
-    sentences.add(Text(
-      text.substring(start, index),
-      style: allSentence,
-    ));
+
+    sentences.addAll(
+      splitSentence(
+        text: text.substring(start, index),
+        style: allSentence,
+        space: (start != 0),
+      ),
+    );
 
     sentences.add(Tooltip(
       message: suggestion,
@@ -42,9 +51,14 @@ List<Widget> getSentence({
       padding: const EdgeInsets.all(10),
       textStyle: allSentence,
       decoration: suggestionDecoration,
-      child: Text(
-        error,
-        style: mistakeSentence,
+      child: Wrap(
+        children: [
+          ...splitSentence(
+            text: error,
+            style: mistakeSentence,
+            space: !(index == 0 || text[index - 1] != ' '),
+          ),
+        ],
       ),
     ));
 
@@ -59,10 +73,34 @@ List<Widget> getSentence({
     start = index + (error.length as int);
   }
   if (start < text.length) {
-    sentences.add(Text(
-      text.substring(start),
+    sentences.addAll(splitSentence(
+      text: text.substring(start),
       style: allSentence,
+      space: !(start == 0 || text[start - 1] != ' '),
     ));
   }
+  return sentences;
+}
+
+List prohibitedSymbols = ['\n'];
+List<Widget> splitSentence({
+  required String text,
+  String del = ' ',
+  style,
+  space = true,
+}) {
+  List<Widget> sentences = [];
+  var splitted = text.split(del);
+  for (var word in splitted) {
+    for (var c in prohibitedSymbols) {
+      word = word.replaceAll(c, '');
+    }
+    sentences.add(Text(
+      (space ? ' ' : '') + word,
+      style: style,
+    ));
+    space = true;
+  }
+
   return sentences;
 }
