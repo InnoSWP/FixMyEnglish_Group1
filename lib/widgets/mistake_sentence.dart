@@ -24,7 +24,7 @@ class MistakeSentence extends StatelessWidget {
     return Wrap(
       children: [
         ...l.map((e) => Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 15),
+              padding: const EdgeInsets.only(bottom: 15),
               child: e,
             ))
       ],
