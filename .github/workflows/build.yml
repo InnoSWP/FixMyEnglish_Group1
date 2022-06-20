@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - link-with-linker
+      - work-with-linker
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -14,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@work-with-linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
