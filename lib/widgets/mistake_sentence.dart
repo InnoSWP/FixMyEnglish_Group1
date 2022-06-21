@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../utilities/manage_sentence.dart';
+
 class MistakeSentence extends StatelessWidget {
   final String text;
-  const MistakeSentence({required this.text, super.key});
+  final String error;
+  final String suggestion;
+  const MistakeSentence({
+    required this.text,
+    super.key,
+    this.error = '',
+    required this.suggestion,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 20,
-        ),
-      ),
+    List<Widget> l = getSentence(
+      text: text,
+      context: context,
+      error: error,
+      suggestion: suggestion,
+    );
+    return Wrap(
+      children: [
+        ...l.map((e) => Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: e,
+            ))
+      ],
     );
   }
 }

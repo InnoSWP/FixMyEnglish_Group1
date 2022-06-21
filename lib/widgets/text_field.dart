@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../models/controller.dart';
+
 class MyTextField extends StatelessWidget {
   final int maxLines;
   final String? text;
-  TextEditingController? myController;
-  MyTextField({this.maxLines = 10, this.text, this.myController, super.key});
+  MyController? myController;
+  MyTextField({
+    this.maxLines = 10,
+    this.text,
+    this.myController,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (text != null) {
-      if (myController != null) {
-        myController?.text = text ?? '';
-      } else {
-        myController = TextEditingController(text: text);
-      }
-    }
+    myController ??= MyController(TextEditingController(text: ''));
+
     return TextField(
-      controller: myController,
+      controller: myController?.controller,
       maxLines: maxLines,
+      onChanged: (str) {},
       decoration: const InputDecoration(
         filled: true,
         fillColor: Colors.white,
