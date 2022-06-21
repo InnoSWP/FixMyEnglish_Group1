@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/file_list.dart';
-import '../widgets/mistake_sentence.dart';
 import '../widgets/app_bar.dart';
 import '../style/colors.dart';
 import '../widgets/my_button.dart';
 import '../models/simple_dialog.dart';
+import '../widgets/mistake_list.dart';
+import '../models/file.dart';
+import '../widgets/default_file_list.dart';
+import '../utilities/extract.dart';
 
 class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
@@ -17,28 +20,13 @@ class UploadFilePage extends StatefulWidget {
 }
 
 class _UploadFilePageState extends State<UploadFilePage> {
-  final _sentences = const [
-    MistakeSentence(
-      text: 'some text with mistake1',
-      error: 'mistake1',
-      suggestion: 'sug1',
-    ),
-    MistakeSentence(
-      text: 'some text with mistake2',
-      error: 'mistake2',
-      suggestion: 'sug2',
-    ),
-    MistakeSentence(
-      text: 'some text with mistake3',
-      error: 'mistake3',
-      suggestion: 'sug3',
-    ),
-    MistakeSentence(
-      text: 'some text with mistake4',
-      error: 'mistake4',
-      suggestion: 'sug4',
-    ),
+  final files = [
+    File(name: 'emptyFile', id: 0),
+    File(name: 'file_1', id: 1),
+    File(name: 'file_2', id: 2),
+    File(name: 'file_3', id: 3),
   ];
+  int currentFile = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,62 +36,51 @@ class _UploadFilePageState extends State<UploadFilePage> {
         children: [
           Expanded(
             flex: 2,
-            child: Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  color: colorSecondaryLightGreenPlant,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black38),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                      ),
-                      margin: const EdgeInsets.only(
-                          left: 13, right: 13, bottom: 13),
-                      padding: const EdgeInsets.only(left: 15),
-                      child: _sentences[index],
-                    ),
-                    itemCount: _sentences.length,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      text: 'Extract',
-                      onPressed: () {
-                        showMyNotification(
-                          text: 'Extract button isn\'t working for now!',
-                          context: context,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
+            child: MistakeList(
+              sentences: files[currentFile].mistakeSentences,
             ),
           ),
           Expanded(
             child: Container(
               color: colorTextSmoothBlack,
-              child: Column(
+              child: Stack(
                 children: [
-                  const Expanded(
-                    child: FileListView(),
+                  Expanded(
+                    child: (files.length == 1
+                        ? const DefaultFileList()
+                        : FileListView(
+                            files: files.sublist(1),
+                            removeFile: removeFile,
+                            changeFile: changeFile,
+                          )),
                   ),
-                  Padding(
+                  Container(
+                    alignment: Alignment.bottomRight,
                     padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      text: 'Extract All',
-                      onPressed: () {
-                        showMyNotification(
-                          text: 'Extract All button isn\'t working for now!',
-                          context: context,
-                        );
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MyButton(
+                          text: '   New file   ',
+                          onPressed: _pickFiles,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        MyButton(
+                          text: 'Extract All',
+                          onPressed: () {
+                            showMyNotification(
+                              text:
+                                  'Extract All button isn\'t working for now!',
+                              context: context,
+                            );
+                            for (final file in files) {
+                              extract(file.mistakeSentences);
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -113,5 +90,52 @@ class _UploadFilePageState extends State<UploadFilePage> {
         ],
       ),
     );
+  }
+
+  void removeFile({int? id, File? file}) {
+    if (file != null && files.contains(file)) {
+      setState(() {
+        files.remove(file);
+        if (file.id == currentFile) {
+          currentFile--;
+        }
+      });
+      print('file with id: ${file.id} removed!');
+    } else if (id != null) {
+      for (var filei in files) {
+        if (filei.id == id) {
+          setState(() {
+            files.remove(filei);
+            if (id == currentFile) {
+              currentFile--;
+            }
+          });
+          print('file with id: $id removed!');
+          break;
+        }
+      }
+    } else {
+      print('can\'t remove file');
+    }
+  }
+
+  void _pickFiles() async {
+    // TODO: implementation for add new file button
+    // when a user click to 'New file' button a user should be able to pick a file to upload
+    // extensions: pdf
+    return;
+  }
+
+  void changeFile(int id) {
+    var index = 0;
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].id == id) {
+        index = i;
+        break;
+      }
+    }
+    setState(() {
+      currentFile = index;
+    });
   }
 }
