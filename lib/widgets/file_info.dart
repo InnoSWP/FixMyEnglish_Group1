@@ -18,7 +18,7 @@ class FileInfo extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.all(15),
         width: double.infinity,
-        color: colorPrimaryRedCaramel,
+        color: Color(0xFFF2EEE1),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

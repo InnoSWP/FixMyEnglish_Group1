@@ -23,7 +23,7 @@ class MyTextField extends StatelessWidget {
       onChanged: (str) {},
       decoration: const InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Color(0xFFF2EEE1),
         hintText: 'Enter text here',
         contentPadding: EdgeInsets.only(
           left: 14.0,

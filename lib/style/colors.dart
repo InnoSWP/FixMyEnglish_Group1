@@ -20,3 +20,5 @@ const customBlue = Color.fromARGB(255, 174, 211, 241);
 
 // background color of list of files
 const Color colorTextSmoothBlack = Color(0xFF49454F);
+
+const Color colorTextbackgroundtextbox = Color(0xFFF2EEE1);
