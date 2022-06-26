@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
+import './bulk_upload.dart';
 
 AppBar getAppBar({
   backgroundColor = Colors.white,
   title,
   elevation = 0,
+  actions = false,
 }) {
   title ??= getLogo();
   return AppBar(
@@ -13,6 +15,7 @@ AppBar getAppBar({
     elevation: elevation,
     backgroundColor: backgroundColor,
     title: title,
+    actions: (actions ? [BulkUploadButton()] : null),
   );
 }
 
