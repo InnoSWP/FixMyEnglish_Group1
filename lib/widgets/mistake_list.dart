@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../style/colors.dart';
+import '../style/fix_text_page/button_style.dart';
+import '../style/fix_text_page/colors.dart';
+import '../style/fix_text_page/text_style.dart';
 import '../widgets/my_button.dart';
 import '../utilities/extract.dart';
 import '../models/simple_dialog.dart';
@@ -19,7 +22,7 @@ class MistakeList extends StatelessWidget {
               Container(
                 // alignment: Alignment.bottomLeft,
                 width: double.infinity,
-                color: colorSecondaryLightGreenPlant,
+                color: backgroundBlocks,
                 // padding: const EdgeInsets.all(10),
                 // decoration: BoxDecoration(
                 //   border: Border.all(color: Colors.blueAccent),
@@ -43,7 +46,18 @@ class MistakeList extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 padding: const EdgeInsets.all(8.0),
                 child: MyButton(
-                  text: 'Extract',
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                  // gradient: buttonLinearGradient,
+                  color: backgroundButton,
+                  width: 185,
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Image.asset('icons/csv_icon.png'),
+                      const SizedBox(width: 10),
+                      const Text('Extract to csv', style: analyzeButton),
+                    ],
+                  ),
                   onPressed: () {
                     showMyNotification(
                       text: 'Extract button isn\'t working for now!',
