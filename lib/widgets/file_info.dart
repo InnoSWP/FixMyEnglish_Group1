@@ -25,6 +25,7 @@ class FileInfo extends StatelessWidget {
             Text(
               file.name ?? 'File name not specified!',
               style: fileInfoStyle,
+              overflow: TextOverflow.ellipsis,
             ),
             IconButton(
                 onPressed: () {
