@@ -61,14 +61,14 @@ class _UploadFilePageState extends State<UploadFilePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         MyButton(
-                          text: '   New file   ',
+                          child: Text('New file'),
                           onPressed: _pickFiles,
                         ),
                         const SizedBox(
                           width: 20,
                         ),
                         MyButton(
-                          text: 'Extract All',
+                          child: Text('Extract All'),
                           onPressed: () {
                             showMyNotification(
                               text:
