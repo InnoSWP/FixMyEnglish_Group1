@@ -129,11 +129,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
     }
   }
 
+  // when a user click to 'New file' button a user should be able to pick a file to upload
+  // allowed extensions: pdf
   void _pickFiles() async {
-    // TODO: implementation for add new file button
-    // when a user click to 'New file' button a user should be able to pick a file to upload
-    // extensions: pdf
-
     try {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -149,14 +147,10 @@ class _UploadFilePageState extends State<UploadFilePage> {
           String text = extractor.extractText();
 
           List mistakeSentences = [];
-          postTextSample(
+          postText(
             text: text,
             context: context,
           ).then((l) {
-            mistakeSentences.add(MistakeSentence(
-              text: file.name,
-              suggestion: 'none',
-            ));
             for (var e in l) {
               mistakeSentences.add(MistakeSentence(
                 suggestion: e.suggestion,
