@@ -5,7 +5,7 @@
 ## Project Description
 This is a web-app, which helps users to find and fix Academic-Writing mistakes. The project is created on Flutter, Dart. Users can upload pdf files with the essays or write text and then the app sends the list of mistakes, where users can understand, where are each mistakes, which sentence contains mistakes and how to fix these mistakes.
 
---photo--
+![](assets/logo/logo.png)
 
 The repository contains a code base.
 
@@ -14,15 +14,15 @@ The repository contains a code base.
 ## Getting start
 You can go to the --link-- and firstly try to use it. The main page contains a text field, where you can add some text and try to fix it.
 
---photo--
+![](assets/main_page.png)
 
 After clicking the "fix" button, you will see the list of mistakes in the text. These mistakes may also be fixed, and the app will tell you how to do it.
 
---photo--
+![](assets/Text_parse.png)
 
 Another option is to click the "Upload" button. This will transfer you to the next page, where there is a list of files you uploaded on the right and the mistakes on some files on the left.
 
---photo--
+![](assets/fix_files.png)
 
 ---
 
