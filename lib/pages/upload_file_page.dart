@@ -3,6 +3,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../style/fix_text_page/decorations.dart';
+import '../style/text_style.dart';
+import '../style/upload_file_page/text_style.dart';
+import '../widgets/default_no_file.dart';
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
 import '../style/colors.dart';
@@ -39,66 +43,112 @@ class _UploadFilePageState extends State<UploadFilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getAppBar(),
-      body: Row(
+      body: Column(
         children: [
+          const Divider(color: colorPrimaryRedCaramel, height: 3),
+          const Divider(color: colorPrimaryRedCaramel, height: 5),
           Expanded(
-            flex: 2,
-            child: MistakeList(
-              sentences: files[currentFile].mistakeSentences,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: colorTextSmoothBlack,
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: (files.length == 1
-                            ? const DefaultFileList()
-                            : FileListView(
-                                files: files.sublist(1),
-                                removeFile: removeFile,
-                                changeFile: changeFile,
-                              )),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        MyButton(
-                          child: Text('New file'),
-                          onPressed: _pickFiles,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        MyButton(
-                          child: Text('Extract All'),
-                          onPressed: () {
-                            showMyNotification(
-                              text:
-                                  'Extract All button isn\'t working for now!',
-                              context: context,
-                            );
-                            for (final file in files) {
-                              extract(file.mistakeSentences);
-                            }
-                          },
-                        ),
-                      ],
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    margin:
+                        const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                    decoration: decorationBlocks,
+                    child: MistakeList(
+                      sentences: files[currentFile].mistakeSentences,
+                      defaultScreen: const DefaultFileList(),
                     ),
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    decoration: decorationBlocks,
+                    child: (files.length == 1
+                        ? DefaultNoFile(onPressed: _pickFiles)
+                        : Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(bottom: 30),
+                                      child: FileListView(
+                                        currentFile: files[currentFile].id,
+                                        files: files.sublist(1),
+                                        removeFile: removeFile,
+                                        changeFile: changeFile,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    MyButton(
+                                      onPressed: _pickFiles,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'icons/add_file_button.png',
+                                            color: backgroundButton,
+                                          ),
+                                          const Text(
+                                            'Upload more',
+                                            style: uploadMoreButton,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    MyButton(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                      width: 200,
+                                      color: backgroundButton,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Image.asset('icons/csv_icon.png'),
+                                          const Text(
+                                            'Extract all to csv',
+                                            style: extractButtonStyle,
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () {
+                                        showMyNotification(
+                                          text:
+                                              'Extract All button isn\'t working for now!',
+                                          context: context,
+                                        );
+                                        for (final file in files) {
+                                          extract(file.mistakeSentences);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )),
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -147,7 +197,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
           String text = extractor.extractText();
 
           List mistakeSentences = [];
-          postText(
+          postTextSample(
             text: text,
             context: context,
           ).then((l) {
