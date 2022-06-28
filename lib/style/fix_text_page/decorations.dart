@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import './colors.dart';
 
-const BoxDecoration decorationBlocks = BoxDecoration(
+final BoxDecoration decorationBlocks = BoxDecoration(
   color: backgroundBlocks,
-  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+  border: Border.all(color: Colors.black38),
 );
