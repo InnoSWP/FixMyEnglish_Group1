@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../widgets/mistake_sentence.dart';
 import '../widgets/app_bar.dart';
-import '../style/colors.dart';
 import '../widgets/my_button.dart';
-import '../models/simple_dialog.dart';
 import '../services/api_service.dart';
 import '../models/controller.dart';
 import '../models/sentence.dart';
+import '../widgets/mistake_list.dart';
 
 class FixTextPage extends StatefulWidget {
   static const pageName = '/fix_text';
@@ -45,48 +44,7 @@ class _FixTextPageState extends State<FixTextPage> {
         children: [
           Expanded(
             flex: 2,
-            child: Stack(
-              children: [
-                Container(
-                  // alignment: Alignment.bottomLeft,
-                  width: double.infinity,
-                  color: colorSecondaryLightGreenPlant,
-                  // padding: const EdgeInsets.all(10),
-                  // decoration: BoxDecoration(
-                  //   border: Border.all(color: Colors.blueAccent),
-                  // ),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black38),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                      ),
-                      margin: const EdgeInsets.only(
-                          left: 13, right: 13, bottom: 13),
-                      padding: const EdgeInsets.only(left: 15, top: 13),
-                      child: _sentences[index],
-                    ),
-                    itemCount: _sentences.length,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      text: 'Extract',
-                      onPressed: () {
-                        showMyNotification(
-                          text: 'Extract button isn\'t working for now!',
-                          context: context,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: MistakeList(sentences: _sentences),
           ),
           Expanded(
             flex: 1,
