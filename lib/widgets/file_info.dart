@@ -3,40 +3,58 @@ import 'package:flutter/material.dart';
 import '../models/file.dart';
 import '../style/colors.dart';
 import '../style/text_style.dart';
+import '../style/upload_file_page/button_style.dart';
+import 'my_button.dart';
 
 class FileInfo extends StatelessWidget {
   final File file;
   final Function deleteFunc;
-  const FileInfo({super.key, required this.file, required this.deleteFunc});
+  final Function changeFile;
+  final bool isChoosen;
+  const FileInfo({
+    super.key,
+    required this.file,
+    required this.deleteFunc,
+    required this.changeFile,
+    this.isChoosen = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        alignment: Alignment.center,
-        height: 80,
-        padding: const EdgeInsets.all(15),
-        width: double.infinity,
-        color: Color(0xFFF2EEE1),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
+    return MyButton(
+      height: 90,
+      border: Border.all(width: 1),
+      borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+      gradient: (isChoosen ? fileInfoLinearGradient : null),
+      color: (isChoosen ? null : colorTextbackgroundtextbox),
+      onPressed: () => changeFile(file.id),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Image.asset(
+            'icons/pdf_button.png',
+            width: 30,
+            height: 35,
+          ),
+          Expanded(
+            child: Text(
+              textAlign: TextAlign.center,
               file.name ?? 'File name not specified!',
               style: fileInfoStyle,
               overflow: TextOverflow.ellipsis,
             ),
-            IconButton(
-                onPressed: () {
-                  deleteFunc(file: file);
-                },
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.red,
-                )),
-          ],
-        ),
+          ),
+          IconButton(
+            onPressed: () {
+              deleteFunc(file: file);
+            },
+            icon: const ImageIcon(
+              AssetImage('icons/delete_button.png'),
+              color: Colors.red,
+              size: 35,
+            ),
+          ),
+        ],
       ),
     );
   }
