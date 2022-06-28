@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0-170.0.dev <3.0.0'
+  sdk: '>=2.17.0-170.0.dev <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   file_picker: ^4.6.1
   syncfusion_flutter_pdf: ^20.1.61-beta
+  csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:
