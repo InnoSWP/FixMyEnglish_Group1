@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
-// button background color
-const colorSecondaryGreenPlant = Color(0xFF4D6658);
-
 // background color of home page
 const colorPrimaryRedCaramel = Color(0xFF864921);
-
-// background color of list of mistakes box
-const colorSecondaryLightGreenPlant = Color(0xFFE9F1E8);
 
 // red color for incorrect sentence
 const customRed = Color.fromARGB(255, 255, 17, 0);
