@@ -23,5 +23,12 @@ const BoxDecoration suggestionDecoration = BoxDecoration(
 const TextStyle fileInfoStyle = TextStyle(
   color: customBlack,
   fontSize: 24,
+  fontFamily: 'Eczar',
   overflow: TextOverflow.ellipsis,
+);
+
+const TextStyle extractButtonStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 18,
+  fontFamily: 'Eczar',
 );
