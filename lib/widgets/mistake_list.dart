@@ -20,20 +20,15 @@ class MistakeList extends StatelessWidget {
         : Stack(
             children: [
               Container(
-                // alignment: Alignment.bottomLeft,
                 width: double.infinity,
-                color: backgroundBlocks,
-                // padding: const EdgeInsets.all(10),
-                // decoration: BoxDecoration(
-                //   border: Border.all(color: Colors.blueAccent),
-                // ),
                 child: ListView.builder(
                   itemBuilder: (context, index) => Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black38),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                    ),
+                    // border for each sentence
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(color: Colors.black38),
+                    //   borderRadius:
+                    //       const BorderRadius.all(Radius.circular(5.0)),
+                    // ),
                     margin:
                         const EdgeInsets.only(left: 13, right: 13, bottom: 13),
                     padding: const EdgeInsets.only(left: 15, top: 13),
