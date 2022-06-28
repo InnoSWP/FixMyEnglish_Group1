@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './pages/home_page.dart';
-import './pages/fix_text_page.dart';
 import './pages/upload_file_page.dart';
-import './pages/test_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,9 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Fix My Exglish',
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
-        '/test': (context) => const TestPage(),
-        '/fix_text': (context) => const FixTextPage(),
+        '/': (context) => const HomePage(),
         '/upload_file': (context) => const UploadFilePage(),
       },
     );
