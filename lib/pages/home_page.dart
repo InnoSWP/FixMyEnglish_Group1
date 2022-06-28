@@ -23,6 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final myController = MyController(TextEditingController());
   static final _sentences = [];
 
   void _addSentences(Sentence s) {
@@ -37,10 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var args = MyController(TextEditingController(text: ''));
-    if (ModalRoute.of(context)?.settings.arguments != null) {
-      args = ModalRoute.of(context)!.settings.arguments as MyController;
-    }
     return Scaffold(
       appBar: getAppBar(actions: true),
       backgroundColor: Colors.white,
@@ -65,16 +62,13 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     margin: const EdgeInsets.all(20),
                     decoration: decorationBlocks,
-                    // alignment: Alignment.topCenter,
                     child: Stack(
                       alignment: Alignment.bottomCenter,
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         MyTextField(
                           maxLines: 50,
-                          myController: args,
-                          text: args.controller.text,
+                          myController: myController,
+                          text: myController.controller.text,
                           borderRadius: 20.0,
                         ),
                         Container(
@@ -85,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                                 _sentences.clear();
                               });
                               postTextSample(
-                                text: args.controller.text,
+                                text: myController.controller.text,
                                 context: context,
                               ).then((l) {
                                 l.forEach(_addSentences);
