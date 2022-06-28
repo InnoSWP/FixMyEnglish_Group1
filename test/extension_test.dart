@@ -19,6 +19,15 @@ void main() {
       expect(getExtension("file_name1"), "file_name1");
       expect(getExtension("file_name2"), "file_name2");
     });
+    test("file_name with multiple dots", () {
+      // dot including
+      expect(getExtension("file_name.a.b.c.pdf"), ".pdf");
+      expect(getExtension("file_name.d.e.f.docx"), ".docx");
+
+      // dot excluding
+      expect(getExtension("file_name.g.h.i.txt", dot: false), "txt");
+      expect(getExtension("file_name.j.k.l.md", dot: false), "md");
+    });
   });
 
   group("removeExtension()", () {
