@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './colors.dart';
+import '../colors.dart';
 
 const LinearGradient buttonLinearGradient = LinearGradient(
   begin: Alignment.topCenter,
