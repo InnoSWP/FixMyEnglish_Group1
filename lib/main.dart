@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
-        '/upload_file': (context) => const UploadFilePage(),
+        '/upload_file': (context) =>  UploadFilePage(),
       },
     );
   }

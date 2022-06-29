@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../models/controller.dart';
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
 import '../style/colors.dart';
@@ -20,8 +21,9 @@ import '../utilities/last_clicked_file.dart';
 
 class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
+  final myController = MyController(TextEditingController());
 
-  const UploadFilePage({super.key});
+   UploadFilePage({super.key});
 
   @override
   State<UploadFilePage> createState() => _UploadFilePageState();
@@ -31,6 +33,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   static final files = [
     File(name: 'emptyFile', id: 0),
   ];
+  
   int currentFile = 0;
   int currentFileId = 1;
   LastClick lastClick = LastClick();
@@ -148,7 +151,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
           String text = extractor.extractText();
 
           List mistakeSentences = [];
-          postText(
+          postTextSample(
             text: text,
             context: context,
           ).then((l) {
