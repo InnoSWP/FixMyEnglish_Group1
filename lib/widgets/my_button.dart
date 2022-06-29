@@ -11,6 +11,10 @@ class MyButton extends StatelessWidget {
   final Gradient? gradient;
   final ButtonStyle? style;
   final Color? color;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final AlignmentGeometry? alignment;
+  final BoxBorder? border;
   const MyButton({
     super.key,
     this.onPressed,
@@ -21,17 +25,25 @@ class MyButton extends StatelessWidget {
     this.gradient,
     this.style,
     this.color,
+    this.padding,
+    this.margin,
+    this.alignment,
+    this.border,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: alignment,
+      padding: padding,
+      margin: margin,
       width: width,
       height: height,
       decoration: BoxDecoration(
         borderRadius: borderRadius,
         gradient: gradient,
         color: color,
+        border: border,
       ),
       child: ElevatedButton(
         style: style ?? gradientButtonStyle,

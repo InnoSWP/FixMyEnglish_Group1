@@ -12,7 +12,8 @@ const customBlack = Color.fromARGB(255, 0, 0, 0);
 // background color of suggestion box
 const customBlue = Color.fromARGB(255, 174, 211, 241);
 
-// background color of list of files
-const Color colorTextSmoothBlack = Color(0xFF49454F);
-
+// main color of all blocks
 const Color colorTextbackgroundtextbox = Color(0xFFF2EEE1);
+
+// background color of button[extract]
+const backgroundButton = Color(0xFF4D6658);
