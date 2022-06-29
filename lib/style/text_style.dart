@@ -15,7 +15,7 @@ const TextStyle allSentence = TextStyle(
 );
 
 const BoxDecoration suggestionDecoration = BoxDecoration(
-  borderRadius: BorderRadius.all(Radius.circular(2.0)),
+  borderRadius: BorderRadius.all(Radius.circular(10.0)),
   color: customBlue,
 );
 
