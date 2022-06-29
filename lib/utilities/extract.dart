@@ -4,18 +4,19 @@ import 'dart:io' as io;
 import 'dart:async';
 import 'package:csv/csv.dart';
 
-Future<void> extract(List data, {String path='.'}) async {
+Future<void> extract(String? fileName ,List data, {String path='.'} ) async {
   List<List<dynamic>> rows = [];
   List<dynamic> row = [];
   row.add("Match");
   row.add("Sentence");
-  // row.add("Label");
+  row.add("Label");
   row.add("Description");
   rows.add(row);
     for (int i = 0; i < data.length; i++) {
       List<dynamic> row = [];
       row.add(data[i].error);
       row.add(data[i].text);
+      row.add(data[i].lable);
       row.add(data[i].suggestion);
       rows.add(row);
     }
@@ -27,7 +28,7 @@ Future<void> extract(List data, {String path='.'}) async {
   final anchor = html.document.createElement('a') as html.AnchorElement
     ..href = url
     ..style.display = 'none'
-    ..download = 'file.csv';
+    ..download = '$fileName.csv';
   html.document.body?.children.add(anchor);
 
   anchor.click();
@@ -35,13 +36,5 @@ Future<void> extract(List data, {String path='.'}) async {
   html.document.body?.children.remove(anchor);
   html.Url.revokeObjectUrl(url);
 
-  // final filename = 'file.csv';
-  // var file = io.File(filename);
-  // file.writeAsStringSync(csv);
-  // final rawData = file.readAsBytesSync();
-  // final content = base64Encode(rawData);
-  // AnchorElement(
-  //     href: "data:application/octet-stream;charset=utf-16le;base64,$content")
-  //   ..setAttribute("download", "file.csv")
-  //   ..click();
+  
 }

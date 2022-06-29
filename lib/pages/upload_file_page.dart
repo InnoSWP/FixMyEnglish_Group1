@@ -44,6 +44,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
           Expanded(
             flex: 2,
             child: MistakeList(
+              fileName: files[currentFile].name,
               sentences: files[currentFile].mistakeSentences,
             ),
           ),
@@ -87,8 +88,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                   'Extract All button isn\'t working for now!',
                               context: context,
                             );
-                            for (final file in files) {
-                              extract(file.mistakeSentences);
+                            for (final file in files.sublist(1)) {
+                              extract(file.name ,file.mistakeSentences);
                             }
                           },
                         ),

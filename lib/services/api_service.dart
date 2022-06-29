@@ -42,6 +42,7 @@ void acceptHandler(
     final body = jsonDecode(response.body) as List;
     body.forEach((e) {
       sentenceList.add(Sentence(
+        lable: e['label'] as String,
         text: e['sentence'] as String,
         suggestion: e['description'] as String,
         error: e['match'] as String,
@@ -93,6 +94,7 @@ Future<List<Sentence>> postTextSample({text = '', context}) async {
     final body = jsonDecode(bodySample) as List;
     body.forEach((e) {
       sentenceList.add(Sentence(
+        lable: e['label'] as String,
         text: e['sentence'] as String,
         suggestion: e['description'] as String,
         error: e['match'] as String,
