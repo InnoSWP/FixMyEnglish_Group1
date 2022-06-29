@@ -4,7 +4,7 @@ import 'dart:io' as io;
 import 'dart:async';
 import 'package:csv/csv.dart';
 
-Future<void> extract(String? fileName ,List data, {String path='.'} ) async {
+Future<void> extract(String? fileName, List data, {String path = '.'}) async {
   List<List<dynamic>> rows = [];
   List<dynamic> row = [];
   row.add("Match");
@@ -12,14 +12,14 @@ Future<void> extract(String? fileName ,List data, {String path='.'} ) async {
   row.add("Label");
   row.add("Description");
   rows.add(row);
-    for (int i = 0; i < data.length; i++) {
-      List<dynamic> row = [];
-      row.add(data[i].error);
-      row.add(data[i].text);
-      row.add(data[i].lable);
-      row.add(data[i].suggestion);
-      rows.add(row);
-    }
+  for (int i = 0; i < data.length; i++) {
+    List<dynamic> row = [];
+    row.add(data[i].error);
+    row.add(data[i].text);
+    row.add(data[i].label);
+    row.add(data[i].suggestion);
+    rows.add(row);
+  }
 
   String csv = const ListToCsvConverter().convert(rows);
   final bytes = utf8.encode(csv);
@@ -35,6 +35,4 @@ Future<void> extract(String? fileName ,List data, {String path='.'} ) async {
 
   html.document.body?.children.remove(anchor);
   html.Url.revokeObjectUrl(url);
-
-  
 }
