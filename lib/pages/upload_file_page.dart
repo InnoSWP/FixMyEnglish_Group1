@@ -28,7 +28,7 @@ class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
   final myController = MyController(TextEditingController());
 
-   UploadFilePage({super.key});
+  UploadFilePage({super.key});
 
   @override
   State<UploadFilePage> createState() => _UploadFilePageState();
@@ -38,7 +38,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   static final files = [
     File(name: 'emptyFile', id: 0),
   ];
-  
+
   int currentFile = 0;
   int currentFileId = 1;
   LastClick lastClick = LastClick();
@@ -51,8 +51,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
         children: [
           const Divider(color: colorPrimaryRedCaramel, height: 3),
           const Divider(color: colorPrimaryRedCaramel, height: 5),
-          Expanded(/*
-
+          Expanded(
             child: Row(
               children: [
                 Expanded(
@@ -62,63 +61,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
                         const EdgeInsets.only(left: 20, top: 20, bottom: 20),
                     decoration: decorationBlocks,
                     child: MistakeList(
+                      fileName: files[currentFile].name,
                       sentences: files[currentFile].mistakeSentences,
                       defaultScreen: const DefaultFileList(),
-=======
-            flex: 2,
-            child: MistakeList(
-              fileName: files[currentFile].name,
-              sentences: files[currentFile].mistakeSentences,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: colorTextSmoothBlack,
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: (files.length == 1
-                            ? const DefaultFileList()
-                            : FileListView(
-                                files: files.sublist(1),
-                                removeFile: removeFile,
-                                changeFile: changeFile,
-                              )),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        MyButton(
-                          child: Text('New file'),
-                          onPressed: _pickFiles,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        MyButton(
-                          child: Text('Extract All'),
-                          onPressed: () {
-                            showMyNotification(
-                              text:
-                                  'Extract All button isn\'t working for now!',
-                              context: context,
-                            );
-                            for (final file in files.sublist(1)) {
-                              extract(file.name ,file.mistakeSentences);
-                            }
-                          },
-                        ),
-                      ],
-
-*/
                     ),
                   ),
                 ),
@@ -189,13 +134,11 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                         ],
                                       ),
                                       onPressed: () {
-                                        showMyNotification(
-                                          text:
-                                              'Extract All button isn\'t working for now!',
-                                          context: context,
-                                        );
-                                        for (final file in files) {
-                                          extract(file.mistakeSentences);
+                                        for (final file in files.sublist(1)) {
+                                          extract(
+                                            file.name,
+                                            file.mistakeSentences,
+                                          );
                                         }
                                       },
                                     ),
@@ -246,6 +189,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: allowedExtensions,
+        allowMultiple: true,
       );
       if (result != null && result.files.isNotEmpty) {
         for (final file in result.files) {
@@ -263,6 +207,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
           ).then((l) {
             for (var e in l) {
               mistakeSentences.add(MistakeSentence(
+                label: e.label,
                 suggestion: e.suggestion,
                 text: e.text,
                 error: e.error,
