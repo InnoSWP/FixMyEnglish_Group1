@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                     margin:
                         const EdgeInsets.only(left: 20, top: 20, bottom: 20),
                     decoration: decorationBlocks,
-                    child: MistakeList(sentences: _sentences),
+                    child: MistakeList(fileName: "yourFileName", sentences: _sentences),
                   ),
                 ),
                 Expanded(

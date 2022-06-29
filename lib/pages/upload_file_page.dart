@@ -7,6 +7,8 @@ import '../style/fix_text_page/decorations.dart';
 import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
 import '../widgets/default_no_file.dart';
+import '../models/controller.dart';
+
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
 import '../style/colors.dart';
@@ -24,8 +26,9 @@ import '../utilities/last_clicked_file.dart';
 
 class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
+  final myController = MyController(TextEditingController());
 
-  const UploadFilePage({super.key});
+   UploadFilePage({super.key});
 
   @override
   State<UploadFilePage> createState() => _UploadFilePageState();
@@ -35,6 +38,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   static final files = [
     File(name: 'emptyFile', id: 0),
   ];
+  
   int currentFile = 0;
   int currentFileId = 1;
   LastClick lastClick = LastClick();
@@ -47,7 +51,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
         children: [
           const Divider(color: colorPrimaryRedCaramel, height: 3),
           const Divider(color: colorPrimaryRedCaramel, height: 5),
-          Expanded(
+          Expanded(/*
+
             child: Row(
               children: [
                 Expanded(
@@ -59,6 +64,61 @@ class _UploadFilePageState extends State<UploadFilePage> {
                     child: MistakeList(
                       sentences: files[currentFile].mistakeSentences,
                       defaultScreen: const DefaultFileList(),
+=======
+            flex: 2,
+            child: MistakeList(
+              fileName: files[currentFile].name,
+              sentences: files[currentFile].mistakeSentences,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              color: colorTextSmoothBlack,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Expanded(
+                        child: (files.length == 1
+                            ? const DefaultFileList()
+                            : FileListView(
+                                files: files.sublist(1),
+                                removeFile: removeFile,
+                                changeFile: changeFile,
+                              )),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MyButton(
+                          child: Text('New file'),
+                          onPressed: _pickFiles,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        MyButton(
+                          child: Text('Extract All'),
+                          onPressed: () {
+                            showMyNotification(
+                              text:
+                                  'Extract All button isn\'t working for now!',
+                              context: context,
+                            );
+                            for (final file in files.sublist(1)) {
+                              extract(file.name ,file.mistakeSentences);
+                            }
+                          },
+                        ),
+                      ],
+
+*/
                     ),
                   ),
                 ),

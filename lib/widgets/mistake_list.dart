@@ -10,12 +10,11 @@ import './default_mistake_list.dart';
 
 class MistakeList extends StatelessWidget {
   final List sentences;
+  final String? fileName;
   final Widget defaultScreen;
-  const MistakeList({
-    super.key,
-    required this.sentences,
-    this.defaultScreen = const DefaultMistakeList(),
-  });
+  const MistakeList(
+  {required this.fileName,super.key, required this.sentences,this.defaultScreen = const DefaultMistakeList(),});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class MistakeList extends StatelessWidget {
                       text: 'Extract button isn\'t working for now!',
                       context: context,
                     );
-                    extract(sentences);
+                    extract(fileName, sentences);
                   },
                 ),
               ),
