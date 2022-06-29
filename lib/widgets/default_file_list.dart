@@ -11,7 +11,7 @@ class DefaultFileList extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('icons/upload_file_not_imported.png'),
+          Image.asset("assets/icons/upload_file_not_imported.png"),
           const SizedBox(height: 38),
           const Text(
             'No pdf imported',

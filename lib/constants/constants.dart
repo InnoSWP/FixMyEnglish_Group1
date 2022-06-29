@@ -1,4 +1,4 @@
-const logoPath = 'logo/logo.png';
+const logoPath = "assets/logo/logo.png";
 
 const noPdfPath = 'logo/braza.png';
 const urnaPomoika = 'logo/delete-10400.png';

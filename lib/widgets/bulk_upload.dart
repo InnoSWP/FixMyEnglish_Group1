@@ -31,7 +31,7 @@ class BulkUploadButton extends StatelessWidget {
         child: Row(
           children: [
             Image.asset(
-              'icons/pdf_button.png',
+              "assets/icons/pdf_button.png",
               height: 30,
               width: 30,
             ),

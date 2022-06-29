@@ -12,9 +12,12 @@ class MistakeList extends StatelessWidget {
   final List sentences;
   final String? fileName;
   final Widget defaultScreen;
-  const MistakeList(
-  {required this.fileName,super.key, required this.sentences,this.defaultScreen = const DefaultMistakeList(),});
-  
+  const MistakeList({
+    required this.fileName,
+    super.key,
+    required this.sentences,
+    this.defaultScreen = const DefaultMistakeList(),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class MistakeList extends StatelessWidget {
                           tooltip: 'Report a bug',
                           onPressed: () => reportBug(context: context),
                           icon: const ImageIcon(
-                            AssetImage('icons/report_bug.png'),
+                            AssetImage("assets/icons/report_bug.png"),
                             color: Colors.red,
                           ),
                         ),
@@ -65,7 +68,7 @@ class MistakeList extends StatelessWidget {
                   height: 50,
                   child: Row(
                     children: [
-                      Image.asset('icons/csv_icon.png'),
+                      Image.asset("assets/icons/csv_icon.png"),
                       const SizedBox(width: 10),
                       const Text('Extract to csv', style: extractButtonStyle),
                     ],

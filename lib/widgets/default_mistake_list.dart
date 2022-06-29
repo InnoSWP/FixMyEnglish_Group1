@@ -11,7 +11,7 @@ class DefaultMistakeList extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('icons/default_fix_text.png'),
+          Image.asset("assets/icons/default_fix_text.png"),
           const SizedBox(height: 38),
           const Text(
             'No text imported',

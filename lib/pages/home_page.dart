@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                             gradient: buttonLinearGradient,
                             child: Row(
                               children: [
-                                Image.asset('icons/analyze_icon.png'),
+                                Image.asset("assets/icons/analyze_icon.png"),
                                 const SizedBox(
                                   width: 10,
                                 ),

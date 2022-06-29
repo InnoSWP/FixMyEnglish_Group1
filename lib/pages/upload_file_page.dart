@@ -104,7 +104,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Image.asset(
-                                            'icons/add_file_button.png',
+                                            "assets/icons/add_file_button.png",
                                             color: backgroundButton,
                                           ),
                                           const Text(
@@ -126,7 +126,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Image.asset('icons/csv_icon.png'),
+                                          Image.asset(
+                                              "assets/icons/csv_icon.png"),
                                           const Text(
                                             'Extract all to csv',
                                             style: extractButtonStyle,

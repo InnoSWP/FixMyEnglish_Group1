@@ -9,7 +9,7 @@ class DefaultNoFile extends StatelessWidget {
     return Center(
       child: TextButton(
         onPressed: onPressed,
-        child: Image.asset('icons/default_no_file.png'),
+        child: Image.asset("assets/icons/default_no_file.png"),
       ),
     );
   }

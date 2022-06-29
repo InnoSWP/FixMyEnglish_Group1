@@ -32,7 +32,7 @@ class FileInfo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            'icons/pdf_button.png',
+            "assets/icons/pdf_button.png",
             width: 30,
             height: 35,
           ),
@@ -49,7 +49,7 @@ class FileInfo extends StatelessWidget {
               deleteFunc(file: file);
             },
             icon: const ImageIcon(
-              AssetImage('icons/delete_button.png'),
+              AssetImage("assets/icons/delete_button.png"),
               color: Colors.red,
               size: 35,
             ),
