@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../style/text_style.dart';
 
+bool dot = false;
 List<Widget> getSentence({
   required String text,
   error = '',
   suggestion,
   context,
 }) {
+  dot = true;
   List<Widget> sentences = [];
   if (error == '') {
     sentences.add(Tooltip(
@@ -92,14 +94,17 @@ List<Widget> splitSentence({
   List<Widget> sentences = [];
   var splitted = text.split(del);
   for (var word in splitted) {
+    // clearing prohibited symbols
     for (var c in prohibitedSymbols) {
       word = word.replaceAll(c, '');
     }
+
     sentences.add(Text(
-      (space ? ' ' : '') + word,
+      (dot ? '• ' : (space ? ' ' : '')) + word,
       style: style,
     ));
     space = true;
+    dot = false;
   }
 
   return sentences;
