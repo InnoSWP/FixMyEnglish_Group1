@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   void _addSentences(Sentence s) {
     setState(() {
       _sentences.add(MistakeSentence(
+        label: s.label,
         text: s.text,
         suggestion: s.suggestion,
         error: s.error,
@@ -54,7 +55,8 @@ class _HomePageState extends State<HomePage> {
                     margin:
                         const EdgeInsets.only(left: 20, top: 20, bottom: 20),
                     decoration: decorationBlocks,
-                    child: MistakeList(fileName: "yourFileName", sentences: _sentences),
+                    child: MistakeList(
+                        fileName: "yourFileName", sentences: _sentences),
                   ),
                 ),
                 Expanded(
