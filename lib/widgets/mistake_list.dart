@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../style/colors.dart';
 import '../style/text_style.dart';
+import '../utilities/report_bug.dart';
 import '../widgets/my_button.dart';
 import '../utilities/extract.dart';
 import '../models/simple_dialog.dart';
@@ -36,7 +37,20 @@ class MistakeList extends StatelessWidget {
                     margin:
                         const EdgeInsets.only(left: 13, right: 13, bottom: 13),
                     padding: const EdgeInsets.only(left: 15, top: 13),
-                    child: sentences[index],
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: sentences[index]),
+                        IconButton(
+                          tooltip: 'Report a bug',
+                          onPressed: () => reportBug(context: context),
+                          icon: const ImageIcon(
+                            AssetImage('icons/report_bug.png'),
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   itemCount: sentences.length,
                 ),
