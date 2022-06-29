@@ -6,11 +6,13 @@ class MistakeSentence extends StatelessWidget {
   final String text;
   final String error;
   final String suggestion;
+  final String label;
   const MistakeSentence({
     required this.text,
     super.key,
     this.error = '',
     required this.suggestion,
+    required this.label,
   });
 
   @override
