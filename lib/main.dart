@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'firebase_options.dart';
-
+import 'package:sizer/sizer.dart';
 import './pages/home_page.dart';
 import './pages/upload_file_page.dart';
 
@@ -19,15 +19,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fix My Exglish',
-      initialRoute: '/',
-      navigatorObservers: [FlutterSmartDialog.observer],
-      routes: {
-        '/': (context) => const HomePage(),
-        '/upload_file': (context) => UploadFilePage(),
-      },
-      builder: FlutterSmartDialog.init(),
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          title: 'Fix My Exglish',
+          initialRoute: '/',
+          navigatorObservers: [FlutterSmartDialog.observer],
+          routes: {
+            '/': (context) => const HomePage(),
+            '/upload_file': (context) =>  UploadFilePage(),
+          },
+          builder: FlutterSmartDialog.init(),
+        );
+      }
     );
   }
 }

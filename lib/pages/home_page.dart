@@ -79,6 +79,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: 20.0,
                         ),
                         Container(
+                          decoration: decorationBlocks,
                           margin: const EdgeInsets.only(bottom: 18),
                           child: MyButton(
                             onPressed: () async {

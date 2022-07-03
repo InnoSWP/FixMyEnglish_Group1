@@ -41,6 +41,8 @@ dependencies:
   firebase_core: ^1.19.1
   cloud_firestore: ^3.2.1
   flutter_smart_dialog: ^4.5.3+6
+  flutter_dropzone: ^3.0.5
+  sizer: ^2.0.15
 
 dev_dependencies:
   flutter_test:

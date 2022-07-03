@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-
 import '../style/fix_text_page/decorations.dart';
 import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
@@ -28,7 +28,6 @@ import '../utilities/last_clicked_file.dart';
 class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
   final myController = MyController(TextEditingController());
-
   UploadFilePage({super.key});
 
   @override
@@ -39,32 +38,42 @@ class _UploadFilePageState extends State<UploadFilePage> {
   static final files = [
     File(name: 'emptyFile', id: 0),
   ];
-
+  bool highlight = false;
   int currentFile = 0;
   int currentFileId = 1;
   LastClick lastClick = LastClick();
-
+  late DropzoneViewController controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getAppBar(),
-      body: Column(
+      body: Stack(
         children: [
-          const Divider(color: colorPrimaryRedCaramel, height: 3),
-          const Divider(color: colorPrimaryRedCaramel, height: 5),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    margin:
-                        const EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                    decoration: decorationBlocks,
-                    child: MistakeList(
-                      fileName: files[currentFile].name,
-                      sentences: files[currentFile].mistakeSentences,
-                      defaultScreen: const DefaultFileList(),
+          DropzoneView(
+            onCreated: (DropzoneViewController ctrl) => controller = ctrl,
+            onHover: () => setState(() => highlight = true),
+            onLeave: () => setState(() => highlight = false),
+            onDrop: UploadedFile,
+          ),
+          Column(
+            children: [
+              const Divider(color: colorPrimaryRedCaramel, height: 3),
+              const Divider(color: colorPrimaryRedCaramel, height: 5),
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                            left: 20, top: 20, bottom: 20),
+                        decoration: decorationBlocks,
+                        child: MistakeList(
+                          fileName: files[currentFile].name,
+                          sentences: files[currentFile].mistakeSentences,
+                          defaultScreen: const DefaultFileList(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -88,8 +97,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                         files: files.sublist(1),
                                         removeFile: removeFile,
                                         changeFile: changeFile,
+
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -132,30 +142,75 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                             'Extract all to csv',
                                             style: extractButtonStyle,
                                           ),
-                                        ],
-                                      ),
-                                      onPressed: () {
-                                        for (final file in files.sublist(1)) {
-                                          extract(
-                                            file.name,
-                                            file.mistakeSentences,
-                                          );
-                                        }
-                                      },
+                                          onPressed: () {
+                                            for (final file
+                                                in files.sublist(1)) {
+                                              extract(
+                                                file.name,
+                                                file.mistakeSentences,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                  ),
-                )
-              ],
-            ),
+                                  ),
+                                ],
+                              )),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  Future UploadedFile(dynamic event) async {
+    final name = event.name;
+    final data = await controller.getFileData(event);
+    print('Name : $name');
+
+    //widget.onDroppedFile(droppedFile);
+    setState(() {
+      highlight = false;
+    });
+
+    //////////
+    ///
+    ///
+
+    PdfDocument document = PdfDocument(
+      inputBytes: data,
+    );
+    PdfTextExtractor extractor = PdfTextExtractor(document);
+
+    String text = extractor.extractText();
+
+    List mistakeSentences = [];
+    postTextSample(
+      text: text,
+      context: context,
+    ).then((l) {
+      for (var e in l) {
+        mistakeSentences.add(MistakeSentence(
+          label: e.label,
+          suggestion: e.suggestion,
+          text: e.text,
+          error: e.error,
+        ));
+      }
+    });
+    setState(() {
+      files.add(File(
+        id: currentFileId++,
+        name: removeExtension(event.name),
+        mistakeSentences: mistakeSentences,
+      ));
+    });
   }
 
   void removeFile({int? id, File? file}) {
