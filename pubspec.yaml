@@ -38,6 +38,9 @@ dependencies:
   file_picker: ^4.6.1
   syncfusion_flutter_pdf: ^20.1.61-beta
   csv: ^5.0.1
+  firebase_core: ^1.19.1
+  cloud_firestore: ^3.2.1
+  flutter_smart_dialog: ^4.5.3+6
   flutter_dropzone: ^3.0.5
   sizer: ^2.0.15
 
@@ -80,12 +83,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Eczar
+      fonts:
+        - asset: assets/fonts/Eczar-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Eczar-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Eczar-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Eczar-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Eczar-ExtraBold.ttf
+          weight: 800
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

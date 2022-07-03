@@ -37,11 +37,13 @@ class FileInfo extends StatelessWidget {
             height: 35,
           ),
           Expanded(
-            child: Text(
-              textAlign: TextAlign.center,
-              file.name ?? 'File name not specified!',
-              style: fileInfoStyle,
-              overflow: TextOverflow.ellipsis,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                textAlign: TextAlign.center,
+                file.name ?? 'File name not specified!',
+                style: fileInfoStyle,
+              ),
             ),
           ),
           IconButton(

@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:fix_my_english/widgets/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../style/fix_text_page/text_style.dart';
+import '../widgets/custom_loading.dart';
+import '../widgets/custom_toast.dart';
 import '../widgets/mistake_sentence.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/my_button.dart';
@@ -77,16 +82,33 @@ class _HomePageState extends State<HomePage> {
                           decoration: decorationBlocks,
                           margin: const EdgeInsets.only(bottom: 18),
                           child: MyButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              SmartDialog.showLoading(builder: (context) {
+                                return const CustomLoading();
+                              });
+
                               setState(() {
                                 _sentences.clear();
                               });
-                              postTextSample(
-                                text: myController.controller.text,
-                                context: context,
-                              ).then((l) {
-                                l.forEach(_addSentences);
-                              });
+                              try {
+                                (await postTextSample(
+                                  text: myController.controller.text,
+                                  context: context,
+                                ))
+                                    .forEach(_addSentences);
+                              } catch (e) {
+                                print('Error: $e');
+                                SmartDialog.showToast('',
+                                    alignment: Alignment.bottomCenter,
+                                    builder: (context) {
+                                  return const CustomToast(
+                                      child: Text(
+                                    'Failed to fetch data from API',
+                                    style: errorToast,
+                                  ));
+                                });
+                              }
+                              SmartDialog.dismiss();
                             },
                             height: 50,
                             width: 185,

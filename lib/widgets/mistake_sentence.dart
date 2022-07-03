@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../style/text_style.dart';
 import '../utilities/manage_sentence.dart';
 
 class MistakeSentence extends StatelessWidget {
@@ -7,12 +8,16 @@ class MistakeSentence extends StatelessWidget {
   final String error;
   final String suggestion;
   final String label;
+  final TextStyle allTextStyle;
+  final TextStyle mistakeTextStyle;
   const MistakeSentence({
     required this.text,
     super.key,
     this.error = '',
     required this.suggestion,
     required this.label,
+    this.allTextStyle = allSentence,
+    this.mistakeTextStyle = mistakeSentence,
   });
 
   @override
@@ -22,6 +27,8 @@ class MistakeSentence extends StatelessWidget {
       context: context,
       error: error,
       suggestion: suggestion,
+      allTextStyle: allTextStyle,
+      mistakeTextStyle: mistakeTextStyle,
     );
     return Wrap(
       children: [
