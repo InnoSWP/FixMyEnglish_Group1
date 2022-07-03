@@ -14,7 +14,6 @@ class BulkUploadButton extends StatelessWidget {
         top: 10,
         bottom: 10,
       ),
-      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius: const BorderRadius.all(
