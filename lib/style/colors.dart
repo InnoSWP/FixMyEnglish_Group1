@@ -17,3 +17,5 @@ const Color colorTextbackgroundtextbox = Color(0xFFF2EEE1);
 
 // background color of button[extract]
 const backgroundButton = Color(0xFF4D6658);
+
+const backgroundReportBug = Color(0xFFF2F2F2);
