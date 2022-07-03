@@ -11,3 +11,12 @@ const TextStyle analyzeButton = TextStyle(
   fontSize: 18,
   fontFamily: 'Eczar',
 );
+
+const TextStyle errorToast = TextStyle(
+  fontSize: 18,
+  color: Colors.red,
+  overflow: TextOverflow.ellipsis,
+);
+
+const TextStyle successToast = TextStyle(
+    fontSize: 18, color: Colors.black, overflow: TextOverflow.ellipsis);
