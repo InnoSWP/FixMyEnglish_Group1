@@ -1,3 +1,4 @@
+import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../style/text_style.dart';
@@ -28,6 +29,7 @@ List<Widget> getSentence({
         ],
       ),
     ));
+    
     return sentences;
   }
   int start = 0;
@@ -46,31 +48,60 @@ List<Widget> getSentence({
         space: (start != 0),
       ),
     );
-
-    sentences.add(Tooltip(
-      message: suggestion,
-      // height: 20,
-      padding: const EdgeInsets.all(10),
-      textStyle: allSentence,
-      decoration: suggestionDecoration,
-      child: Wrap(
-        children: [
-          ...splitSentence(
-            text: error,
-            style: mistakeSentence,
-            space: !(index == 0 || text[index - 1] != ' '),
+    
+    sentences.add(
+      HoverAbleWidget(
+          child: Wrap(
+            children: [
+              ...splitSentence(
+                text: error,
+                style: mistakeSentence,
+                space: !(index == 0 || text[index - 1] != ' '),
+              ),
+            ],
           ),
-        ],
-      ),
-    ));
-
-    // sentences.add(
-    //   Text(
-    //     error,
-    //     style: mistakeSentence,
-    //     overflow: TextOverflow.ellipsis,
-    //   ),
-    // );
+          builder: (context) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset("assets/icons/mistake_icon.png",width: 60,height: 60,),
+                      Expanded(
+                        child: Text(suggestion,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            )),
+                      )
+                    ],
+                  ),
+                  const Expanded(
+                    child: Text(
+                      "We will help you to solve your problem SOON",
+                      style: TextStyle(fontSize: 15,color: Colors.grey),
+                      
+                    ),
+                  )
+                ],
+              ),
+            );
+          }),
+    );
 
     start = index + (error.length as int);
   }
