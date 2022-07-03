@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../style/fix_text_page/decorations.dart';
 import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
+import '../style/colors.dart';
+import '../widgets/custom_loading.dart';
 import '../widgets/default_no_file.dart';
 import '../models/controller.dart';
-
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
-import '../style/colors.dart';
 import '../widgets/mistake_sentence.dart';
 import '../widgets/my_button.dart';
 import '../models/simple_dialog.dart';
@@ -68,7 +69,6 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
                   child: Container(
                     margin: const EdgeInsets.all(20),
                     decoration: decorationBlocks,
@@ -80,7 +80,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                 children: [
                                   Expanded(
                                     child: Container(
-                                      margin: const EdgeInsets.only(bottom: 30),
+                                      margin: const EdgeInsets.only(
+                                          bottom:
+                                              30), // if list is filled to have some space below so last file could be accessible
                                       child: FileListView(
                                         currentFile: files[currentFile].id,
                                         files: files.sublist(1),
@@ -95,7 +97,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                 alignment: Alignment.bottomRight,
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     MyButton(
                                       onPressed: _pickFiles,
@@ -113,9 +116,6 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                           )
                                         ],
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
                                     ),
                                     MyButton(
                                       borderRadius: const BorderRadius.all(
@@ -186,6 +186,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
   // when a user click to 'New file' button a user should be able to pick a file to upload
   // allowed extensions: pdf
   void _pickFiles() async {
+    SmartDialog.showLoading(builder: (context) {
+      return const CustomLoading();
+    });
     try {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -215,13 +218,11 @@ class _UploadFilePageState extends State<UploadFilePage> {
               ));
             }
           });
-          setState(() {
-            files.add(File(
-              id: currentFileId++,
-              name: removeExtension(file.name),
-              mistakeSentences: mistakeSentences,
-            ));
-          });
+          files.add(File(
+            id: currentFileId++,
+            name: removeExtension(file.name),
+            mistakeSentences: mistakeSentences,
+          ));
         }
       } else {
         // user closed file dialog
@@ -239,15 +240,21 @@ class _UploadFilePageState extends State<UploadFilePage> {
         text: e,
       );
     }
+    SmartDialog.dismiss();
+    setState(() {});
     return;
   }
 
   void changeFile(int id) {
+    SmartDialog.showLoading(builder: (context) {
+      return const CustomLoading();
+    });
     var index = getIndex(id: id);
     lastClick.add(id);
     setState(() {
       currentFile = index;
     });
+    SmartDialog.dismiss();
   }
 
   int getIndex({File? file, int? id}) {
