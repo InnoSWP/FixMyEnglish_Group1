@@ -75,16 +75,13 @@ class _UploadFilePageState extends State<UploadFilePage> {
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    decoration: decorationBlocks,
-                    child: (files.length == 1
-                        ? DefaultNoFile(onPressed: _pickFiles)
-                        : Stack(
-                            children: [
+                    Expanded(
+                        child: Container(
+                      margin: const EdgeInsets.all(20),
+                      decoration: decorationBlocks,
+                      child: (files.length == 1
+                          ? DefaultNoFile(onPressed: _pickFiles)
+                          : Stack(children: [
                               Column(
                                 children: [
                                   Expanded(
@@ -97,68 +94,71 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                         files: files.sublist(1),
                                         removeFile: removeFile,
                                         changeFile: changeFile,
-
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          MyButton(
+                                            onPressed: _pickFiles,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  "assets/icons/add_file_button.png",
+                                                  color: highlight
+                                                      ? const Color(0xFF82490D)
+                                                      : backgroundButton,
+                                                ),
+                                                const Text(
+                                                  'Upload more',
+                                                  style: uploadMoreButton,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          MyButton(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(16.0)),
+                                            width: 200,
+                                            color: highlight
+                                                ? const Color(0xFF82490D)
+                                                : backgroundButton,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Image.asset(
+                                                      "assets/icons/csv_icon.png"),
+                                                  const Text(
+                                                    'Extract all to csv',
+                                                    style: extractButtonStyle,
+                                                  ),
+                                                ]),
+                                            onPressed: () {
+                                              for (final file
+                                                  in files.sublist(1)) {
+                                                extract(
+                                                  file.name,
+                                                  file.mistakeSentences,
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ]),
                                   ),
                                 ],
                               ),
-                              Container(
-                                alignment: Alignment.bottomRight,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    MyButton(
-                                      onPressed: _pickFiles,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            "assets/icons/add_file_button.png",
-                                            color: backgroundButton,
-                                          ),
-                                          const Text(
-                                            'Upload more',
-                                            style: uploadMoreButton,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    MyButton(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(16.0)),
-                                      width: 200,
-                                      color: backgroundButton,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Image.asset(
-                                              "assets/icons/csv_icon.png"),
-                                          const Text(
-                                            'Extract all to csv',
-                                            style: extractButtonStyle,
-                                          ),
-                                          onPressed: () {
-                                            for (final file
-                                                in files.sublist(1)) {
-                                              extract(
-                                                file.name,
-                                                file.mistakeSentences,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )),
-                      ),
-                    )
+                            ])),
+                    ))
                   ],
                 ),
               ),

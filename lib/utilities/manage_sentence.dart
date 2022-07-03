@@ -1,3 +1,4 @@
+import 'package:fix_my_english/utilities/report_bug.dart';
 import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
