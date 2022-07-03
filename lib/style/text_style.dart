@@ -14,6 +14,18 @@ const TextStyle allSentence = TextStyle(
   overflow: TextOverflow.visible,
 );
 
+const TextStyle smallMistakeSentence = TextStyle(
+  color: customRed,
+  fontSize: 16,
+  overflow: TextOverflow.visible,
+);
+
+const TextStyle smallAllSentence = TextStyle(
+  color: customBlack,
+  fontSize: 16,
+  overflow: TextOverflow.visible,
+);
+
 const BoxDecoration suggestionDecoration = BoxDecoration(
   borderRadius: BorderRadius.all(Radius.circular(10.0)),
   color: customBlue,
@@ -23,7 +35,6 @@ const BoxDecoration suggestionDecoration = BoxDecoration(
 const TextStyle fileInfoStyle = TextStyle(
   color: customBlack,
   fontSize: 24,
-  fontFamily: 'Eczar',
   overflow: TextOverflow.ellipsis,
 );
 
