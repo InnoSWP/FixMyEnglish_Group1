@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
 
 import '../models/controller.dart';
-import '../style/fix_text_page/decorations.dart';
 
 class MyTextField extends StatelessWidget {
   final int maxLines;
   final String? text;
-  MyController? myController;
+  final MyController? myController;
   final double borderRadius;
-  MyTextField({
+  final bool? filled;
+  final Color? filledColor;
+  final String hintText;
+  final bool readOnly;
+  const MyTextField({
     this.maxLines = 10,
-    this.text,
+    this.text = '',
     this.myController,
     super.key,
     this.borderRadius = 0,
+    this.filled,
+    this.filledColor,
+    this.hintText = 'Enter text here...',
+    this.readOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    myController ??= MyController(TextEditingController(text: ''));
+    final initMyController =
+        myController ?? MyController(TextEditingController(text: text));
 
     return TextField(
-      controller: myController?.controller,
+      readOnly: readOnly,
+      controller: initMyController.controller,
       maxLines: maxLines,
       onChanged: (str) {},
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
         ),
-        // filled: true,
-        // fillColor: Color(0xFFF2EEE1),
-        hintText: 'Enter text here...',
+        filled: filled,
+        fillColor: filledColor,
+        hintText: hintText,
         contentPadding: const EdgeInsets.only(
           left: 14.0,
           bottom: 8.0,
