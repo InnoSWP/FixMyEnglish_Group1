@@ -8,6 +8,8 @@ List<Widget> getSentence({
   error = '',
   suggestion,
   context,
+  mistakeTextStyle = mistakeSentence,
+  allTextStyle = allSentence,
 }) {
   dot = true;
   List<Widget> sentences = [];
@@ -16,13 +18,13 @@ List<Widget> getSentence({
       message: suggestion,
       // height: 20,
       padding: const EdgeInsets.all(10),
-      textStyle: allSentence,
+      textStyle: allTextStyle,
       decoration: suggestionDecoration,
       child: Wrap(
         children: [
           ...splitSentence(
             text: text,
-            style: mistakeSentence,
+            style: mistakeTextStyle,
             space: false,
           ),
         ],
@@ -42,7 +44,7 @@ List<Widget> getSentence({
     sentences.addAll(
       splitSentence(
         text: text.substring(start, index),
-        style: allSentence,
+        style: allTextStyle,
         space: (start != 0),
       ),
     );
@@ -51,13 +53,13 @@ List<Widget> getSentence({
       message: suggestion,
       // height: 20,
       padding: const EdgeInsets.all(10),
-      textStyle: allSentence,
+      textStyle: allTextStyle,
       decoration: suggestionDecoration,
       child: Wrap(
         children: [
           ...splitSentence(
             text: error,
-            style: mistakeSentence,
+            style: mistakeTextStyle,
             space: !(index == 0 || text[index - 1] != ' '),
           ),
         ],
@@ -77,7 +79,7 @@ List<Widget> getSentence({
   if (start < text.length) {
     sentences.addAll(splitSentence(
       text: text.substring(start),
-      style: allSentence,
+      style: allTextStyle,
       space: !(start == 0 || text[start - 1] != ' '),
     ));
   }
