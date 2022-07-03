@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'firebase_options.dart';
 
 import './pages/home_page.dart';
 import './pages/upload_file_page.dart';
 
-void main() => runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,10 +22,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fix My Exglish',
       initialRoute: '/',
+      navigatorObservers: [FlutterSmartDialog.observer],
       routes: {
         '/': (context) => const HomePage(),
-        '/upload_file': (context) =>  UploadFilePage(),
+        '/upload_file': (context) => UploadFilePage(),
       },
+      builder: FlutterSmartDialog.init(),
     );
   }
 }
