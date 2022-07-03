@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:sizer/sizer.dart';
 import './pages/home_page.dart';
 import './pages/upload_file_page.dart';
 
@@ -10,13 +10,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fix My Exglish',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomePage(),
-        '/upload_file': (context) =>  UploadFilePage(),
-      },
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          title: 'Fix My Exglish',
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const HomePage(),
+            '/upload_file': (context) =>  UploadFilePage(),
+          },
+        );
+      }
     );
   }
 }

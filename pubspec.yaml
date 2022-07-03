@@ -39,6 +39,7 @@ dependencies:
   syncfusion_flutter_pdf: ^20.1.61-beta
   csv: ^5.0.1
   flutter_dropzone: ^3.0.5
+  sizer: ^2.0.15
 
 dev_dependencies:
   flutter_test:

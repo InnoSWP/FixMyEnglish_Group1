@@ -1,5 +1,6 @@
 import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../style/text_style.dart';
 
@@ -29,7 +30,7 @@ List<Widget> getSentence({
         ],
       ),
     ));
-    
+
     return sentences;
   }
   int start = 0;
@@ -48,7 +49,7 @@ List<Widget> getSentence({
         space: (start != 0),
       ),
     );
-    
+
     sentences.add(
       HoverAbleWidget(
           child: Wrap(
@@ -80,12 +81,55 @@ List<Widget> getSentence({
                 children: [
                   Row(
                     children: [
-                      Image.asset("assets/icons/mistake_icon.png",width: 60,height: 60,),
+                      suggestion == "using a forbidden words"? Image.asset(
+    "assets/icons/mistake_icon.png",
+    width: 5.w,
+    height: 10.h,
+  ): suggestion == 
+  "Preferring and so on to etc."? Image.asset(
+    "assets/icons/mistake_icon2.png",
+    width: 5.w,
+    height: 5.h,
+  ): suggestion == 
+  "Using in order to"? Image.asset(
+    "assets/icons/mistake_icon3.png",
+    width: 5.w,
+    height: 5.h,
+  ): suggestion == 
+  "Using a number of"? Image.asset(
+    "assets/icons/mistake_icon4.png",
+    width: 5.w,
+    height: 5.h,
+  ): suggestion ==
+  "Using pronoun incorrectly"? Image.asset(
+    "assets/icons/mistake_icon5.png",
+    width: 5.w,
+    height: 5.h,
+  ): suggestion ==
+  "Using digits for numbers below 11"? Image.asset(
+    "assets/icons/mistake_icon6.png",
+    width: 5.w,
+    height: 5.h,
+  ): suggestion ==
+  "Starting a sentence with a digit."? Image.asset(
+    "assets/icons/mistake_icon7.png",
+    width: 5.w,
+    height: 5.h,
+  ):suggestion ==
+  "A very long sentence having over 2 clauses and being over 3 lines long"? Image.asset(
+    "assets/icons/mistake_icon7.png",
+    width: 5.w,
+    height: 5.h,
+  ):Image.asset(
+    "assets/icons/mistake_icon.png",
+    width: 5.w,
+    height: 10.h,
+  ),
                       Expanded(
                         child: Text(suggestion,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                              fontSize: 19,
                             )),
                       )
                     ],
@@ -93,8 +137,7 @@ List<Widget> getSentence({
                   const Expanded(
                     child: Text(
                       "We will help you to solve your problem SOON",
-                      style: TextStyle(fontSize: 15,color: Colors.grey),
-                      
+                      style: TextStyle(fontSize: 15, color: Colors.grey),
                     ),
                   )
                 ],
