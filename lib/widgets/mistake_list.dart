@@ -7,6 +7,7 @@ import '../widgets/my_button.dart';
 import '../utilities/extract.dart';
 import '../models/simple_dialog.dart';
 import './default_mistake_list.dart';
+import 'mistake_sentence.dart';
 
 class MistakeList extends StatelessWidget {
   final List sentences;
@@ -45,7 +46,8 @@ class MistakeList extends StatelessWidget {
                         Expanded(child: sentences[index]),
                         IconButton(
                           tooltip: 'Report a bug',
-                          onPressed: () => reportBug(context: context),
+                          onPressed: () =>
+                              reportBug(sentences[index], context: context),
                           icon: const ImageIcon(
                             AssetImage("assets/icons/report_bug.png"),
                             color: Colors.red,
@@ -74,10 +76,6 @@ class MistakeList extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    showMyNotification(
-                      text: 'Extract button isn\'t working for now!',
-                      context: context,
-                    );
                     extract(fileName, sentences);
                   },
                 ),
