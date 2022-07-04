@@ -23,6 +23,7 @@ class MistakeSentence extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> l = getSentence(
+      label: label,
       text: text,
       context: context,
       error: error,
