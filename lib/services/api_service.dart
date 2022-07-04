@@ -2,39 +2,39 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:http/http.dart' as http;
-
-import '../constants/mistake_sample.dart';
-import '../models/simple_dialog.dart';
-import '../constants/constants.dart';
-import '../models/sentence.dart';
 import 'dart:math';
 
-import '../style/fix_text_page/text_style.dart';
+import '../constants/mistake_sample.dart';
+import '../constants/constants.dart';
+import '../models/sentence.dart';
 import '../widgets/custom_toast.dart';
+
+bool isAPIWorking = false;
 
 Future<List<Sentence>> postText({text = '', context}) async {
   if (text == null || text.isEmpty) {
     return [];
   }
-  showMyNotification(
-    text: 'Trying to connect to API to fix given text',
-    context: context,
-  );
 
   List<Sentence> sentenceList = [];
-  await http
-      .post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'text': text,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      )
-      .then((r) => acceptHandler(r, context, sentenceList))
-      .catchError((e) => errorHandler(e, context));
+  await http.post(
+    Uri.parse(apiUrl),
+    body: jsonEncode({
+      'text': text,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  ).then((r) {
+    acceptHandler(r, context, sentenceList, text);
+  }).catchError((e) async {
+    errorHandler(e, context);
+    sentenceList.addAll((await postTextSample(
+      context: context,
+      text: text,
+    )));
+  });
   return sentenceList;
 }
 
@@ -42,8 +42,21 @@ void acceptHandler(
   http.Response response,
   BuildContext? context,
   List sentenceList,
-) {
+  text,
+) async {
   if (response.statusCode == 200) {
+    if (!isAPIWorking) {
+      SmartDialog.showToast(
+        '',
+        alignment: Alignment.bottomCenter,
+        builder: (context) {
+          return const CustomToast(
+            msg: 'Connected to API',
+          );
+        },
+      );
+      isAPIWorking = true;
+    }
     // success
     final body = jsonDecode(response.body) as List;
     body.forEach((e) {
@@ -55,51 +68,64 @@ void acceptHandler(
       ));
     });
   } else {
-    if (context != null) {
-      showMyNotification(
-        error: 'Error: ${response.statusCode}',
-        text: response.body,
-        context: context,
-      );
-    } else {
-      print('Error: ${response.statusCode}');
-    }
+    SmartDialog.showToast(
+      '',
+      alignment: Alignment.bottomCenter,
+      builder: (context) {
+        return CustomToast(
+          msg: 'Failed with status code: ${response.statusCode}!',
+          type: ToastType.error,
+        );
+      },
+    );
+    isAPIWorking = false;
+    sentenceList.addAll((await postTextSample(
+      context: context,
+      text: text,
+    )));
   }
-  if (context != null && sentenceList.isEmpty) {
-    showMyNotification(context: context, text: 'No mistakes found!');
+  if (sentenceList.isEmpty) {
+    SmartDialog.showToast(
+      '',
+      alignment: Alignment.bottomCenter,
+      builder: (context) {
+        return const CustomToast(msg: 'No mistake found!');
+      },
+    );
   }
 }
 
 void errorHandler(onError, BuildContext? context) {
-  if (context != null) {
-    showMyNotification(
-      error: 'Error!',
-      text: onError.toString(),
-      context: context,
-    );
-  } else {
-    print('Error: $onError');
-  }
+  isAPIWorking = false;
+  SmartDialog.showToast(
+    '',
+    alignment: Alignment.bottomCenter,
+    builder: (context) {
+      return const CustomToast(
+        msg: 'Failed to connect to API',
+        type: ToastType.error,
+      );
+    },
+  );
+
+  print('Error: $onError');
 }
 
 Future<List<Sentence>> postTextSample({
   text = '',
   context,
-  notification = true,
 }) async {
   if (text == null || text.isEmpty) {
     return [];
   }
-  if (notification) {
+  if (!isAPIWorking) {
     SmartDialog.showToast(
       '',
       alignment: Alignment.bottomCenter,
       builder: (context) {
         return const CustomToast(
-          child: Text(
-            'Connected to Mock API',
-            style: successToast,
-          ),
+          msg: 'Connected to Mock API',
+          type: ToastType.warning,
         );
       },
       displayTime: const Duration(seconds: 1),
