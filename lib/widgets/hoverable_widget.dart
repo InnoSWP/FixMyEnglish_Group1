@@ -14,8 +14,8 @@ class HoverAbleWidget extends StatefulWidget {
 
 class _HoverAbleWidgetState extends State<HoverAbleWidget> {
   final _key = LabeledGlobalKey(UniqueKey().toString());
-  double get _dialogHight => MediaQuery.of(context).size.height / 6;
-  double get _dialogWidth => MediaQuery.of(context).size.width / 6;
+  double get _dialogHight => MediaQuery.of(context).size.height / 5;
+  double get _dialogWidth => MediaQuery.of(context).size.width / 5;
 
   Size? _widgetSize;
   Offset? _widgetPosition;
