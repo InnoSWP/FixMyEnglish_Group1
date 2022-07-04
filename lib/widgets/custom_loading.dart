@@ -46,7 +46,7 @@ class _CustomLoadingState extends State<CustomLoading>
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         RotationTransition(
           alignment: Alignment.center,
-          turns: _controller,
+          turns: Tween(begin: 1.0, end: 0.0).animate(_controller),
           child: Image.asset(
             "icons/loading.png",
             height: 70,
