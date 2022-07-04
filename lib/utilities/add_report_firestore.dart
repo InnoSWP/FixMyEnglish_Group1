@@ -16,10 +16,9 @@ void addReport(MistakeSentence sentence, String reason) {
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
-          child: Text(
-        'No reason for bug provided!',
-        style: errorToast,
-      ));
+        msg: 'No reason for bug provided!',
+        type: ToastType.error,
+      );
     });
     return;
   }
@@ -35,24 +34,23 @@ void addReport(MistakeSentence sentence, String reason) {
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
-          child: Text(
-        'Denied, you made such report!',
-        style: errorToast,
-      ));
+        msg: 'Denied, you made such report!',
+        type: ToastType.error,
+      );
     });
     return;
   }
+  DateTime now = DateTime.now();
 
   if (lastReports.isNotEmpty &&
-      lastReports.last.date!.difference(DateTime.now()).inMilliseconds <
+      lastReports.last.date!.difference(now).inMilliseconds.abs() <
           limitToMakeQueryDB) {
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
-          child: Text(
-        'Denied, too many reports!',
-        style: errorToast,
-      ));
+        msg: 'Denied, too many reports!',
+        type: ToastType.error,
+      );
     });
     return;
   }
@@ -61,7 +59,7 @@ void addReport(MistakeSentence sentence, String reason) {
   }
 
   // adding new report
-  lastReports.add(ReportDate(report: report));
+  lastReports.add(ReportDate(report: report, date: now));
 
   CollectionReference reports =
       FirebaseFirestore.instance.collection('reports');
@@ -74,21 +72,16 @@ void addReport(MistakeSentence sentence, String reason) {
   }).then((value) {
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
-      return const CustomToast(
-          child: Text(
-        'Report sent, thanks!',
-        style: successToast,
-      ));
+      return const CustomToast(msg: 'Report sent, thanks!');
     });
   }).catchError((error) {
     print('Failed: $error');
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
-          child: Text(
-        'Failed to record your report!',
-        style: errorToast,
-      ));
+        msg: 'Failed to record your report!',
+        type: ToastType.error,
+      );
     });
   });
 }
