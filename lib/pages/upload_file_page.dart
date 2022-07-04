@@ -9,6 +9,7 @@ import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
 import '../style/colors.dart';
 import '../widgets/custom_loading.dart';
+import '../widgets/custom_toast.dart';
 import '../widgets/default_no_file.dart';
 import '../models/controller.dart';
 import '../widgets/file_list.dart';
@@ -191,7 +192,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
     String text = extractor.extractText();
 
     List mistakeSentences = [];
-    postTextSample(
+    postText(
       text: text,
       context: context,
     ).then((l) {
@@ -260,7 +261,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
           String text = extractor.extractText();
 
           List mistakeSentences = [];
-          postTextSample(
+          postText(
             text: text,
             context: context,
           ).then((l) {
@@ -283,16 +284,32 @@ class _UploadFilePageState extends State<UploadFilePage> {
         // user closed file dialog
       }
     } on PlatformException catch (e) {
-      showMyNotification(
-        context: context,
-        error: 'Error(PlatformException)',
-        text: e,
+      // showMyNotification(
+      //   context: context,
+      //   error: 'Error(PlatformException)',
+      //   text: e,
+      // );
+      SmartDialog.showToast(
+        '',
+        alignment: Alignment.bottomCenter,
+        builder: (context) => const CustomToast(
+          msg: 'Wrong platform chosen!',
+          type: ToastType.error,
+        ),
       );
     } catch (e) {
-      showMyNotification(
-        context: context,
-        error: 'Error',
-        text: e,
+      // showMyNotification(
+      //   context: context,
+      //   error: 'Error',
+      //   text: e,
+      // );
+      SmartDialog.showToast(
+        '',
+        alignment: Alignment.bottomCenter,
+        builder: (context) => const CustomToast(
+          msg: 'Can\'t upload files!',
+          type: ToastType.error,
+        ),
       );
     }
     SmartDialog.dismiss();
