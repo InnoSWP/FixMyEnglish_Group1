@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                                 _sentences.clear();
                               });
                               try {
-                                (await postTextSample(
+                                (await postText(
                                   text: myController.controller.text,
                                   context: context,
                                 ))
@@ -102,10 +102,9 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.bottomCenter,
                                     builder: (context) {
                                   return const CustomToast(
-                                      child: Text(
-                                    'Failed to fetch data from API',
-                                    style: errorToast,
-                                  ));
+                                    msg: 'Failed to fetch data from API',
+                                    type: ToastType.error,
+                                  );
                                 });
                               }
                               SmartDialog.dismiss();
