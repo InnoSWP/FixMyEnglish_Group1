@@ -11,7 +11,7 @@ const limitToMakeQueryDB = 1000; // milliseconds
 // translate label to -> link, height, width of its icon
 const labelToIconAsset = <String, Map<String, Object>>{
   'SPOKN1': {
-    'link': 'icons/mistake_icon1.png',
+    'link': 'assets/icons/mistake_icon1.png',
     'height': 5,
     'width': 5,
   },
@@ -46,7 +46,7 @@ const labelToIconAsset = <String, Map<String, Object>>{
     'width': 5,
   },
   'DIGIT8': {
-    'link': 'icons/mistake_icon1.png',
+    'link': 'assets/icons/mistake_icon1.png',
     'height': 5,
     'width': 5,
   },

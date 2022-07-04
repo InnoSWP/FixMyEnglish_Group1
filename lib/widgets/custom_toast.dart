@@ -46,7 +46,8 @@ class CustomToast extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('icons/info_icon_report.png', height: 30, width: 30),
+          Image.asset("assets/icons/info_icon_report.png",
+              height: 30, width: 30),
           const SizedBox(width: 10),
           Text(msg, style: successToast),
         ],
@@ -65,7 +66,8 @@ class CustomToast extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('icons/warning_icon_report.png', height: 30, width: 30),
+          Image.asset("assets/icons/warning_icon_report.png",
+              height: 30, width: 30),
           const SizedBox(width: 10),
           Text(msg, style: warningToast),
         ],
@@ -84,7 +86,7 @@ class CustomToast extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('icons/error_icon_report.png', height: 30, width: 30),
+          Image.asset("assets/icons/error_icon_report.png", height: 30, width: 30),
           const SizedBox(width: 10),
           Text(msg, style: errorToast),
         ],

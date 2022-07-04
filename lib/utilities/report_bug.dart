@@ -95,7 +95,7 @@ void reportBug(MistakeSentence sentence, {required BuildContext context}) {
                 color: backgroundButton,
                 child: Row(
                   children: [
-                    Image.asset("icons/send_button.png"),
+                    Image.asset("assets/icons/send_button.png"),
                     const SizedBox(
                       width: 10,
                     ),

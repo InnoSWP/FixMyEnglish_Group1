@@ -48,7 +48,7 @@ class _CustomLoadingState extends State<CustomLoading>
           alignment: Alignment.center,
           turns: Tween(begin: 1.0, end: 0.0).animate(_controller),
           child: Image.asset(
-            "icons/loading.png",
+            "assets/icons/loading.png",
             height: 70,
             width: 70,
           ),
