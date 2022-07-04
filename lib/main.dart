@@ -1,3 +1,4 @@
+import 'package:fix_my_english/widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -19,19 +20,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          title: 'Fix My Exglish',
-          initialRoute: '/',
-          navigatorObservers: [FlutterSmartDialog.observer],
-          routes: {
-            '/': (context) => const HomePage(),
-            '/upload_file': (context) =>  UploadFilePage(),
-          },
-          builder: FlutterSmartDialog.init(),
-        );
-      }
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        title: 'Fix My Exglish',
+        initialRoute: '/',
+        navigatorObservers: [FlutterSmartDialog.observer],
+        routes: {
+          '/': (context) => const HomePage(),
+          '/upload_file': (context) => UploadFilePage(),
+        },
+        builder: FlutterSmartDialog.init(
+          toastBuilder: (msg) => CustomToast(msg: msg),
+        ),
+      );
+    });
   }
 }
