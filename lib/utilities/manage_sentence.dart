@@ -1,14 +1,18 @@
 import 'package:fix_my_english/utilities/report_bug.dart';
 import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
 
+import '../constants/constants.dart';
 import '../style/text_style.dart';
+import '../widgets/custom_toast.dart';
 
 bool dot = false;
 List<Widget> getSentence({
+  label,
   required String text,
-  error = '',
+  String? error,
   suggestion,
   context,
   mistakeTextStyle = mistakeSentence,
@@ -16,28 +20,32 @@ List<Widget> getSentence({
 }) {
   dot = true;
   List<Widget> sentences = [];
-  if (error == '') {
-    sentences.add(Tooltip(
-      message: suggestion,
-      // height: 20,
-      padding: const EdgeInsets.all(10),
-      textStyle: allTextStyle,
-      decoration: suggestionDecoration,
-      child: Wrap(
-        children: [
-          ...splitSentence(
-            text: text,
-            style: mistakeTextStyle,
-            space: false,
-          ),
-        ],
+  if (!labelToIconAsset.containsKey(label)) {
+    SmartDialog.showToast(
+      '',
+      alignment: Alignment.bottomCenter,
+      builder: (context) => const CustomToast(
+        msg: 'Can\'t find provided label!',
+        type: ToastType.error,
       ),
-    ));
+    );
+    return sentences;
+  }
+  var iconInfo = labelToIconAsset[label];
+  if (error == '') {
+    addHoverableWidget(
+      sentences: sentences,
+      error: null,
+      iconInfo: iconInfo,
+      index: 0,
+      suggestion: suggestion,
+      text: text,
+    );
 
     return sentences;
   }
   int start = 0;
-  while (true) {
+  while (true && error != null) {
     var index = text.indexOf(error, start);
 
     // No match found starting from $start
@@ -45,111 +53,34 @@ List<Widget> getSentence({
       break;
     }
 
-    sentences.addAll(
-      splitSentence(
-        text: text.substring(start, index),
-        style: allTextStyle,
-        space: (start != 0),
-      ),
-    );
+    if (isMistake(
+        text: text, error: error, index: index, suggestion: suggestion)) {
+      sentences.addAll(
+        splitSentence(
+          text: text.substring(start, index),
+          style: allTextStyle,
+          space: (start != 0),
+        ),
+      );
+      addHoverableWidget(
+        sentences: sentences,
+        error: error,
+        iconInfo: iconInfo,
+        index: index,
+        suggestion: suggestion,
+        text: text,
+      );
+    } else {
+      sentences.addAll(
+        splitSentence(
+          text: text.substring(start, index + error.length),
+          style: allTextStyle,
+          space: !(start == 0 || text[start - 1] != ' '),
+        ),
+      );
+    }
 
-    sentences.add(
-      HoverAbleWidget(
-          child: Wrap(
-            children: [
-              ...splitSentence(
-                text: error,
-                style: mistakeSentence,
-                space: !(index == 0 || text[index - 1] != ' '),
-              ),
-            ],
-          ),
-          builder: (context) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      suggestion == "using a forbidden words"? Image.asset(
-    "assets/icons/mistake_icon.png",
-    width: 5.w,
-    height: 10.h,
-  ): suggestion == 
-  "Preferring and so on to etc."? Image.asset(
-    "assets/icons/mistake_icon2.png",
-    width: 5.w,
-    height: 5.h,
-  ): suggestion == 
-  "Using in order to"? Image.asset(
-    "assets/icons/mistake_icon3.png",
-    width: 5.w,
-    height: 5.h,
-  ): suggestion == 
-  "Using a number of"? Image.asset(
-    "assets/icons/mistake_icon4.png",
-    width: 5.w,
-    height: 5.h,
-  ): suggestion ==
-  "Using pronoun incorrectly"? Image.asset(
-    "assets/icons/mistake_icon5.png",
-    width: 5.w,
-    height: 5.h,
-  ): suggestion ==
-  "Using digits for numbers below 11"? Image.asset(
-    "assets/icons/mistake_icon6.png",
-    width: 5.w,
-    height: 5.h,
-  ): suggestion ==
-  "Starting a sentence with a digit."? Image.asset(
-    "assets/icons/mistake_icon7.png",
-    width: 5.w,
-    height: 5.h,
-  ):suggestion ==
-  "A very long sentence having over 2 clauses and being over 3 lines long"? Image.asset(
-    "assets/icons/mistake_icon7.png",
-    width: 5.w,
-    height: 5.h,
-  ):Image.asset(
-    "assets/icons/mistake_icon.png",
-    width: 5.w,
-    height: 10.h,
-  ),
-                      Expanded(
-                        child: Text(suggestion,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19,
-                            )),
-                      )
-                    ],
-                  ),
-                  const Expanded(
-                    child: Text(
-                      "We will help you to solve your problem SOON",
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }),
-    );
-
-    start = index + (error.length as int);
+    start = index + error.length;
   }
   if (start < text.length) {
     sentences.addAll(splitSentence(
@@ -185,4 +116,118 @@ List<Widget> splitSentence({
   }
 
   return sentences;
+}
+
+void addHoverableWidget({
+  required List sentences,
+  text,
+  error,
+  suggestion,
+  index,
+  iconInfo,
+}) {
+  sentences.add(HoverAbleWidget(
+      child: Wrap(
+        children: [
+          ...splitSentence(
+            text: error ?? text,
+            style: mistakeSentence,
+            space: !(index == 0 || text[index - 1] != ' '),
+          ),
+        ],
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    iconInfo!["link"] as String,
+                    height: (iconInfo["height"] as double).h,
+                    width: (iconInfo["width"] as double).w,
+                  ),
+                  Expanded(
+                    child: Text(suggestion,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        )),
+                  )
+                ],
+              ),
+              const Expanded(
+                child: Text(
+                  "We will help you to solve your problem SOON",
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              )
+            ],
+          ),
+        );
+      }));
+}
+
+bool isMistake({
+  text,
+  error,
+  index,
+  suggestion,
+}) {
+  int s_length = text.length;
+  int last_symbol = index + (error.length); // not including last)
+  if (index == 0 && last_symbol == s_length) {
+    // [error]
+    return true;
+  } else if (index == 0 && !isLetter(text[last_symbol])) {
+    // [error text]
+    return true;
+  } else if (index == 0 && suggestion == 'Using contractions') {
+    // [error[n't]]
+    return true;
+  } else if (index > 0 &&
+      last_symbol == s_length &&
+      !isLetter(text[index - 1])) {
+    // [ error]
+    return true;
+  } else if (index > 0 &&
+      last_symbol == s_length &&
+      suggestion == 'Using contractions') {
+    // [[n't]error]
+    return true;
+  } else if (index > 0 &&
+      last_symbol < s_length &&
+      !isLetter(text[last_symbol])) {
+    // [text error text]
+    return true;
+  } else if (index > 0 &&
+      last_symbol < s_length &&
+      suggestion == 'Using contractions') {
+    // [text errorn't text]
+    return true;
+  }
+  return false;
+}
+
+bool isLetter(String s) {
+  if (s.length != 1) {
+    return false;
+  }
+  int c = s.codeUnitAt(0);
+  return (c >= 0x41 && c <= 0x5A) || (c >= 0x61 && c <= 0x7A);
 }
