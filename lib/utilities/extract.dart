@@ -1,7 +1,7 @@
-import 'dart:convert';
-import 'dart:html' as html;
-import 'dart:io' as io;
 import 'dart:async';
+import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'package:csv/csv.dart';
 
 Future<void> extract(String? fileName, List data, {String path = '.'}) async {
