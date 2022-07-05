@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class HoverAbleWidget extends StatefulWidget {
   const HoverAbleWidget(
@@ -103,8 +101,8 @@ class _HoverAbleWidgetState extends State<HoverAbleWidget> {
         if (_isDialogOpen) _closeDialog(context);
       },
       child: Container(
-        child: widget.child,
         key: _key,
+        child: widget.child,
       ),
     );
   }
