@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../style/fix_text_page/text_style.dart';
 
+/// Button to navigate to Upload Page. Used in AppBar.
 class BulkUploadButton extends StatelessWidget {
   const BulkUploadButton({super.key});
 
