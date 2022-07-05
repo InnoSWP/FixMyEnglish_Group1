@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../models/controller.dart';
-import '../models/simple_dialog.dart';
 import '../style/colors.dart';
-import '../style/fix_text_page/button_style.dart';
 import '../style/text_style.dart';
 import '../widgets/mistake_sentence.dart';
 import '../widgets/my_button.dart';
