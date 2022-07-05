@@ -8,10 +8,3 @@ class File {
     this.mistakeSentences = const [],
   });
 }
-
-// class Files {
-//   static final List<File> _files = [];
-//   Function? removeFile;
-//   Files({this.removeFile});
-  
-// }
