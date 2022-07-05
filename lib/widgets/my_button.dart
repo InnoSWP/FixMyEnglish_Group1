@@ -8,7 +8,7 @@ import '../style/fix_text_page/button_style.dart';
 /// And also good [gradient] options for background.
 /// Inside of [MyButton] can be any widget, just pass it as [child].
 /// [child] widget should not exceed [height] and [width] of [MyButton].
-/// To enable [Mybutton] provide [onPressed] function and it should not be `null`.
+/// To enable [MyButton] provide [onPressed] function and it should not be `null`.
 class MyButton extends StatelessWidget {
   const MyButton({
     super.key,
