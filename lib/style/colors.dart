@@ -19,3 +19,9 @@ const Color colorTextbackgroundtextbox = Color(0xFFF2EEE1);
 const backgroundButton = Color(0xFF4D6658);
 
 const backgroundReportBug = Color(0xFFF2F2F2);
+
+const onHoverDragDropButton = Color(0xFF82490D);
+
+const appBarBackground = Colors.white;
+
+const appBarIconBackground = Color(0xFF864921);
