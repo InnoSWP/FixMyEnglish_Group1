@@ -1,10 +1,11 @@
-import 'package:fix_my_english/widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'firebase_options.dart';
 import 'package:sizer/sizer.dart';
+
 import './pages/home_page.dart';
+import './widgets/custom_toast.dart';
 import './pages/upload_file_page.dart';
 
 Future<void> main() async {
