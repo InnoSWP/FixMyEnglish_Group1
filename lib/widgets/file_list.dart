@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import './file_info.dart';
 
+/// A widget to show list of all files that user uploaded.
+///
+/// Files are taken from [files] that passed through constructor
+/// To manipulate those [files] we can use [removeFile] to remove file
+/// and [changeFile] to change current chosen file
 class FileListView extends StatelessWidget {
-  final List files;
-  final int currentFile;
-  final Function removeFile;
-  final Function changeFile;
   const FileListView({
     super.key,
     required this.files,
@@ -14,6 +15,18 @@ class FileListView extends StatelessWidget {
     required this.changeFile,
     this.currentFile = 0,
   });
+
+  /// List of uploaded files.
+  final List files;
+
+  /// Current chosen file id.
+  final int currentFile;
+
+  /// A [Function] to delete current chosen file
+  final Function removeFile;
+
+  /// A [Function] to change file
+  final Function changeFile;
 
   @override
   Widget build(BuildContext context) {
