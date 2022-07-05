@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../style/fix_text_page/colors.dart';
 
+/// A widget to show when no mistake found or TextField is empty.
 class DefaultMistakeList extends StatelessWidget {
   const DefaultMistakeList({super.key});
 
