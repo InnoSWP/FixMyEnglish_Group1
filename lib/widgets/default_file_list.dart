@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../style/fix_text_page/colors.dart';
 
+/// A widget to show when no file chosen or imported.
 class DefaultFileList extends StatelessWidget {
   const DefaultFileList({super.key});
 
