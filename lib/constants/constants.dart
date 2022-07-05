@@ -8,6 +8,10 @@ const int saveNReports = 100;
 
 const limitToMakeQueryDB = 1000; // milliseconds
 
+const defaultFileName = 'yourFileName';
+
+const allowMultipleFileUpload = true;
+
 // translate label to -> link, height, width of its icon
 const labelToIconAsset = <String, Map<String, Object>>{
   'SPOKN1': {
