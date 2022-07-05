@@ -5,9 +5,7 @@ import '../style/text_style.dart';
 import '../utilities/report_bug.dart';
 import '../widgets/my_button.dart';
 import '../utilities/extract.dart';
-import '../models/simple_dialog.dart';
 import './default_mistake_list.dart';
-import 'mistake_sentence.dart';
 
 class MistakeList extends StatelessWidget {
   final List sentences;
