@@ -11,7 +11,11 @@ import '../widgets/custom_toast.dart';
 
 bool isAPIWorking = false;
 
-Future<List<Sentence>> postText({text = '', context}) async {
+Future<List<Sentence>> postText({
+  text = '',
+  context,
+  connectMock = true,
+}) async {
   if (text == null || text.isEmpty) {
     return [];
   }
@@ -27,23 +31,21 @@ Future<List<Sentence>> postText({text = '', context}) async {
       'Access-Control-Allow-Origin': '*',
     },
   ).then((r) {
-    acceptHandler(r, context, sentenceList, text);
+    acceptHandler(r, context, sentenceList, text, connectMock);
   }).catchError((e) async {
     errorHandler(e, context);
-    sentenceList.addAll((await postTextSample(
-      context: context,
-      text: text,
-    )));
+    if (connectMock) {
+      sentenceList.addAll((await postTextSample(
+        context: context,
+        text: text,
+      )));
+    }
   });
   return sentenceList;
 }
 
-void acceptHandler(
-  http.Response response,
-  BuildContext? context,
-  List sentenceList,
-  text,
-) async {
+void acceptHandler(http.Response response, BuildContext? context,
+    List sentenceList, text, connectMock) async {
   if (response.statusCode == 200) {
     if (!isAPIWorking) {
       SmartDialog.showToast(
@@ -59,14 +61,14 @@ void acceptHandler(
     }
     // success
     final body = jsonDecode(response.body) as List;
-    body.forEach((e) {
+    for (var e in body) {
       sentenceList.add(Sentence(
         label: e['label'] as String,
         text: e['sentence'] as String,
         suggestion: e['description'] as String,
         error: e['match'] as String,
       ));
-    });
+    }
   } else {
     SmartDialog.showToast(
       '',
@@ -79,10 +81,12 @@ void acceptHandler(
       },
     );
     isAPIWorking = false;
-    sentenceList.addAll((await postTextSample(
-      context: context,
-      text: text,
-    )));
+    if (connectMock) {
+      sentenceList.addAll((await postTextSample(
+        context: context,
+        text: text,
+      )));
+    }
   }
   if (sentenceList.isEmpty) {
     SmartDialog.showToast(
@@ -107,8 +111,6 @@ void errorHandler(onError, BuildContext? context) {
       );
     },
   );
-
-  print('Error: $onError');
 }
 
 Future<List<Sentence>> postTextSample({
