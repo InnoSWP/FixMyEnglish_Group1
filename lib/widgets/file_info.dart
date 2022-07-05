@@ -6,11 +6,13 @@ import '../style/text_style.dart';
 import '../style/upload_file_page/button_style.dart';
 import 'my_button.dart';
 
+/// A widget to display some information of a single file.
+///
+/// This widget get those information from provided [File].
+/// By clicking a certain [File], it will enable [isChoosen] and changes color to [fileInfoLinearGradient]
+/// To manipulate displayed [File] provide [deleteFunc] to delete current chosen file and
+/// also provide [changeFile] to go to the clicked [File].
 class FileInfo extends StatelessWidget {
-  final File file;
-  final Function deleteFunc;
-  final Function changeFile;
-  final bool isChoosen;
   const FileInfo({
     super.key,
     required this.file,
@@ -18,6 +20,18 @@ class FileInfo extends StatelessWidget {
     required this.changeFile,
     this.isChoosen = false,
   });
+
+  /// Provide [File] to get infomation to show.
+  final File file;
+
+  /// A [Function] to delete current chosen file
+  final Function deleteFunc;
+
+  /// A [Function] to change file
+  final Function changeFile;
+
+  /// Is current file chosen or not, by default [isChoosen] = false
+  final bool isChoosen;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +61,7 @@ class FileInfo extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {
-              deleteFunc(file: file);
-            },
+            onPressed: () => deleteFunc(file: file),
             icon: const ImageIcon(
               AssetImage("assets/icons/delete_button.png"),
               color: Colors.red,
