@@ -1,29 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+
 import '../style/fix_text_page/decorations.dart';
 import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
 import '../style/colors.dart';
+import '../utilities/add_new_file.dart';
 import '../widgets/custom_loading.dart';
 import '../widgets/custom_toast.dart';
 import '../widgets/default_no_file.dart';
 import '../models/controller.dart';
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/mistake_sentence.dart';
 import '../widgets/my_button.dart';
-import '../models/simple_dialog.dart';
 import '../widgets/mistake_list.dart';
 import '../models/file.dart';
 import '../widgets/default_file_list.dart';
 import '../utilities/extract.dart';
 import '../constants/constants.dart';
-import '../utilities/extension.dart';
-import '../services/api_service.dart';
 import '../utilities/last_clicked_file.dart';
 
 class UploadFilePage extends StatefulWidget {
@@ -44,18 +42,20 @@ class _UploadFilePageState extends State<UploadFilePage> {
   int currentFileId = 1;
   LastClick lastClick = LastClick();
   late DropzoneViewController controller;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getAppBar(),
       body: Stack(
         children: [
-          DropzoneView(
-            onCreated: (DropzoneViewController ctrl) => controller = ctrl,
-            onHover: () => setState(() => highlight = true),
-            onLeave: () => setState(() => highlight = false),
-            onDrop: UploadedFile,
-          ),
+          if (kIsWeb)
+            DropzoneView(
+              onCreated: (DropzoneViewController ctrl) => controller = ctrl,
+              onHover: () => setState(() => highlight = true),
+              onLeave: () => setState(() => highlight = false),
+              onDrop: uploadDropedFile,
+            ),
           Column(
             children: [
               const Divider(color: colorPrimaryRedCaramel, height: 3),
@@ -93,8 +93,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                       child: FileListView(
                                         currentFile: files[currentFile].id,
                                         files: files.sublist(1),
-                                        removeFile: removeFile,
-                                        changeFile: changeFile,
+                                        removeFile: _removeFile,
+                                        changeFile: _changeFile,
                                       ),
                                     ),
                                   ),
@@ -114,7 +114,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                                 Image.asset(
                                                   "assets/icons/add_file_button.png",
                                                   color: highlight
-                                                      ? const Color(0xFF82490D)
+                                                      ? onHoverDragDropButton
                                                       : backgroundButton,
                                                 ),
                                                 const Text(
@@ -130,7 +130,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                                     Radius.circular(16.0)),
                                             width: 200,
                                             color: highlight
-                                                ? const Color(0xFF82490D)
+                                                ? onHoverDragDropButton
                                                 : backgroundButton,
                                             child: Row(
                                                 mainAxisAlignment:
@@ -170,72 +170,42 @@ class _UploadFilePageState extends State<UploadFilePage> {
     );
   }
 
-  Future UploadedFile(dynamic event) async {
-    final name = event.name;
+  Future uploadDropedFile(dynamic event) async {
+    SmartDialog.showLoading(builder: (context) {
+      return const CustomLoading();
+    });
     final data = await controller.getFileData(event);
-    print('Name : $name');
+    setState(() => highlight = false);
 
-    //widget.onDroppedFile(droppedFile);
-    setState(() {
-      highlight = false;
-    });
-
-    //////////
-    ///
-    ///
-
-    PdfDocument document = PdfDocument(
-      inputBytes: data,
-    );
-    PdfTextExtractor extractor = PdfTextExtractor(document);
-
-    String text = extractor.extractText();
-
-    List mistakeSentences = [];
-    postText(
-      text: text,
+    await addNewFile(
+      file: data,
       context: context,
-    ).then((l) {
-      for (var e in l) {
-        mistakeSentences.add(MistakeSentence(
-          label: e.label,
-          suggestion: e.suggestion,
-          text: e.text,
-          error: e.error,
-        ));
-      }
-    });
-    setState(() {
-      files.add(File(
-        id: currentFileId++,
-        name: removeExtension(event.name),
-        mistakeSentences: mistakeSentences,
-      ));
-    });
+      currentFileId: currentFileId++,
+      fileName: event.name,
+      filesList: files,
+    );
+    SmartDialog.dismiss();
+    setState(() {});
   }
 
-  void removeFile({int? id, File? file}) {
+  void _removeFile({int? id, File? file}) {
     if (file != null && files.contains(file)) {
       lastClick.remove(file.id);
       setState(() {
         files.remove(file);
-        currentFile = getIndex(id: lastClick.getId());
+        currentFile = _getIndex(id: lastClick.getId());
       });
-      print('file with id: ${file.id} removed!');
     } else if (id != null) {
       for (var filei in files) {
         if (filei.id == id) {
           lastClick.remove(id);
           setState(() {
             files.remove(filei);
-            currentFile = getIndex(id: lastClick.getId());
+            currentFile = _getIndex(id: lastClick.getId());
           });
-          print('file with id: $id removed!');
           break;
         }
       }
-    } else {
-      print('can\'t remove file');
     }
   }
 
@@ -249,46 +219,20 @@ class _UploadFilePageState extends State<UploadFilePage> {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: allowedExtensions,
-        allowMultiple: true,
+        allowMultiple: allowMultipleFileUpload,
       );
       if (result != null && result.files.isNotEmpty) {
         for (final file in result.files) {
-          PdfDocument document = PdfDocument(
-            inputBytes: file.bytes,
-          );
-          PdfTextExtractor extractor = PdfTextExtractor(document);
-
-          String text = extractor.extractText();
-
-          List mistakeSentences = [];
-          postText(
-            text: text,
+          await addNewFile(
+            file: file.bytes,
             context: context,
-          ).then((l) {
-            for (var e in l) {
-              mistakeSentences.add(MistakeSentence(
-                label: e.label,
-                suggestion: e.suggestion,
-                text: e.text,
-                error: e.error,
-              ));
-            }
-          });
-          files.add(File(
-            id: currentFileId++,
-            name: removeExtension(file.name),
-            mistakeSentences: mistakeSentences,
-          ));
+            currentFileId: currentFileId++,
+            filesList: files,
+            fileName: file.name,
+          );
         }
-      } else {
-        // user closed file dialog
       }
-    } on PlatformException catch (e) {
-      // showMyNotification(
-      //   context: context,
-      //   error: 'Error(PlatformException)',
-      //   text: e,
-      // );
+    } on PlatformException {
       SmartDialog.showToast(
         '',
         alignment: Alignment.bottomCenter,
@@ -298,11 +242,6 @@ class _UploadFilePageState extends State<UploadFilePage> {
         ),
       );
     } catch (e) {
-      // showMyNotification(
-      //   context: context,
-      //   error: 'Error',
-      //   text: e,
-      // );
       SmartDialog.showToast(
         '',
         alignment: Alignment.bottomCenter,
@@ -317,19 +256,17 @@ class _UploadFilePageState extends State<UploadFilePage> {
     return;
   }
 
-  void changeFile(int id) {
+  void _changeFile(int id) {
     SmartDialog.showLoading(builder: (context) {
       return const CustomLoading();
     });
-    var index = getIndex(id: id);
+    var index = _getIndex(id: id);
     lastClick.add(id);
-    setState(() {
-      currentFile = index;
-    });
+    setState(() => currentFile = index);
     SmartDialog.dismiss();
   }
 
-  int getIndex({File? file, int? id}) {
+  int _getIndex({File? file, int? id}) {
     if (file != null && files.contains(file)) {
       return files.indexOf(file);
     } else if (id != null) {
