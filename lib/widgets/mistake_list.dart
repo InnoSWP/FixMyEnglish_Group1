@@ -7,16 +7,28 @@ import '../widgets/my_button.dart';
 import '../utilities/extract.dart';
 import './default_mistake_list.dart';
 
+/// A widget to display a list of all mistakes provided by [sentences].
+///
+/// If no errors are found or no files are selected, [MistakeList] only shows [defaultScreen].
+/// [MistakeList] has [extract] button to extract content of [sentences] to csv file.
+/// Name of csv file provided by [fileName].
+/// [MistakeList] also consist of [reportBug] button, to report that highlighted mistake isn't a mistake.
 class MistakeList extends StatelessWidget {
-  final List sentences;
-  final String? fileName;
-  final Widget defaultScreen;
   const MistakeList({
     required this.fileName,
     super.key,
     required this.sentences,
     this.defaultScreen = const DefaultMistakeList(),
   });
+
+  /// List of mistake sentences.
+  final List sentences;
+
+  /// Name of file when clicked [extract] button.
+  final String? fileName;
+
+  /// Display [defaultScreen] if [sentences] is empty.
+  final Widget defaultScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +41,6 @@ class MistakeList extends StatelessWidget {
                 width: double.infinity,
                 child: ListView.builder(
                   itemBuilder: (context, index) => Container(
-                    // border for each sentence
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(color: Colors.black38),
-                    //   borderRadius:
-                    //       const BorderRadius.all(Radius.circular(5.0)),
-                    // ),
                     margin:
                         const EdgeInsets.only(left: 13, right: 13, bottom: 13),
                     padding: const EdgeInsets.only(left: 15, top: 13),
@@ -62,7 +68,6 @@ class MistakeList extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: MyButton(
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                  // gradient: buttonLinearGradient,
                   color: backgroundButton,
                   width: 185,
                   height: 50,
@@ -73,9 +78,7 @@ class MistakeList extends StatelessWidget {
                       const Text('Extract to csv', style: extractButtonStyle),
                     ],
                   ),
-                  onPressed: () {
-                    extract(fileName, sentences);
-                  },
+                  onPressed: () => extract(fileName, sentences),
                 ),
               ),
             ],
