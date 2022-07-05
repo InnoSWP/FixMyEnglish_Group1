@@ -12,7 +12,7 @@ The repository contains a code base.
 ---
 
 ## Getting start
-You can go to the --link-- and firstly try to use it. The main page contains a text field, where you can add some text and try to fix it.
+You can go to the [link](https://fix-my-english-c6270.web.app/#/) and firstly try to use it. The main page contains a text field, where you can add some text and try to fix it.
 
 ![](assets/main_page.png)
 
