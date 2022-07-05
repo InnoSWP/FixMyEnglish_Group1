@@ -3,12 +3,31 @@ import 'package:flutter/material.dart';
 
 import '../style/text_style.dart';
 
+/// Types of [CustomToast] widget
 enum ToastType {
+  /// First, type of [CustomToast] that shows content as some information.
+  ///
+  /// INFO type of [CustomToast] is a widget with info icon and [infoBoxReport] box decoration.
+  /// This type is used when you want to display some information to user.
   info,
+
+  /// Second, type of [CustomToast] that shows content as some warning message.
+  ///
+  /// Warning type of [CustomToast] is a widget with warning icon and [warningBoxReport] box decoration.
+  /// This type is used when you want to show some warning to user.
   warning,
+
+  /// Third, type of [CustomToast] that shows content as some error message.
+  ///
+  /// Error type of [CustomToast] is a widget with error icon and [errorBoxReport] box decoration.
+  /// This type is used when you want to show some error to user.
   error,
 }
 
+/// A widget to show some message to user.
+///
+/// Messages depends on type of [CustomToast] by default its [ToastType.info]
+/// Depending to types this widget can show your message as Info, Warning, Error
 class CustomToast extends StatelessWidget {
   const CustomToast({
     super.key,
@@ -16,7 +35,12 @@ class CustomToast extends StatelessWidget {
     this.type = ToastType.info,
   });
 
+  /// Type of [CustomToast] by default its [ToastType.info]
   final ToastType type;
+
+  /// Message you want to display to user
+  ///
+  /// All styles depends on chosen [ToastType]
   final String msg;
 
   @override
@@ -35,6 +59,7 @@ class CustomToast extends StatelessWidget {
     }
   }
 
+  /// Build Info type of [CustomToast]
   Widget _buildInfoType(BuildContext context) {
     return Container(
       height: 50,
@@ -55,6 +80,7 @@ class CustomToast extends StatelessWidget {
     );
   }
 
+  /// Build Warning type of [CustomToast]
   Widget _buildWarningType(BuildContext context) {
     return Container(
       height: 50,
@@ -75,6 +101,7 @@ class CustomToast extends StatelessWidget {
     );
   }
 
+  /// Build Error type of [CustomToast]
   Widget _buildErrorType(BuildContext context) {
     return Container(
       height: 50,
@@ -86,7 +113,8 @@ class CustomToast extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/icons/error_icon_report.png", height: 30, width: 30),
+          Image.asset("assets/icons/error_icon_report.png",
+              height: 30, width: 30),
           const SizedBox(width: 10),
           Text(msg, style: errorToast),
         ],
