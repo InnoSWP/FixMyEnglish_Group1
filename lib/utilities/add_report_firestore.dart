@@ -5,7 +5,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../constants/constants.dart';
 import '../models/report.dart';
 import '../models/report_date.dart';
-import '../style/fix_text_page/text_style.dart';
 import '../widgets/custom_toast.dart';
 import '../widgets/mistake_sentence.dart';
 
@@ -75,7 +74,6 @@ void addReport(MistakeSentence sentence, String reason) {
       return const CustomToast(msg: 'Report sent, thanks!');
     });
   }).catchError((error) {
-    print('Failed: $error');
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
