@@ -1,9 +1,8 @@
-import 'package:fix_my_english/utilities/report_bug.dart';
-import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
 
+import '../widgets/hoverable_widget.dart';
 import '../constants/constants.dart';
 import '../style/text_style.dart';
 import '../widgets/custom_toast.dart';
@@ -147,7 +146,7 @@ void addHoverableWidget({
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: const Offset(0, 3), // changes position of shadow
               ),
             ],
           ),
@@ -189,34 +188,34 @@ bool isMistake({
   index,
   suggestion,
 }) {
-  int s_length = text.length;
-  int last_symbol = index + (error.length); // not including last)
-  if (index == 0 && last_symbol == s_length) {
+  int sLength = text.length;
+  int lastSymbol = index + (error.length); // not including last)
+  if (index == 0 && lastSymbol == sLength) {
     // [error]
     return true;
-  } else if (index == 0 && !isLetter(text[last_symbol])) {
+  } else if (index == 0 && !isLetter(text[lastSymbol])) {
     // [error text]
     return true;
   } else if (index == 0 && suggestion == 'Using contractions') {
     // [error[n't]]
     return true;
   } else if (index > 0 &&
-      last_symbol == s_length &&
+      lastSymbol == sLength &&
       !isLetter(text[index - 1])) {
     // [ error]
     return true;
   } else if (index > 0 &&
-      last_symbol == s_length &&
+      lastSymbol == sLength &&
       suggestion == 'Using contractions') {
     // [[n't]error]
     return true;
   } else if (index > 0 &&
-      last_symbol < s_length &&
-      !isLetter(text[last_symbol])) {
+      lastSymbol < sLength &&
+      !isLetter(text[lastSymbol])) {
     // [text error text]
     return true;
   } else if (index > 0 &&
-      last_symbol < s_length &&
+      lastSymbol < sLength &&
       suggestion == 'Using contractions') {
     // [text errorn't text]
     return true;
