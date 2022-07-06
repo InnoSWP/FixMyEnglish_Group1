@@ -8,6 +8,15 @@ import '../widgets/my_button.dart';
 import '../widgets/text_field.dart';
 import 'add_report_firestore.dart';
 
+/// Show dialog to be able report a bug for a certain [sentence].
+///
+/// [reportBug] simply calls [showDialog] with [AlertDialog] and with some
+/// decorations.
+///
+/// [reportBug] dialog consist of:
+///   1. [sentence] itself with hoverable error.
+///   2. [MyTextField] to write your feedback for this [sentence].
+///   3. [MyButton] called `Send report` to send feedback to FireStore by [addReport]
 void reportBug(MistakeSentence sentence, {required BuildContext context}) {
   // creating new sentence with small font size
   MistakeSentence smallFontSizeSentence = MistakeSentence(
@@ -19,6 +28,7 @@ void reportBug(MistakeSentence sentence, {required BuildContext context}) {
     mistakeTextStyle: smallMistakeSentence,
   );
 
+  // Controller for feedback TexField.
   final MyController myController =
       MyController(TextEditingController(text: ''));
 
