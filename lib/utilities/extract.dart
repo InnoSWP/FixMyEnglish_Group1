@@ -4,7 +4,14 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'package:csv/csv.dart';
 
-Future<void> extract(String? fileName, List data, {String path = '.'}) async {
+/// Implemetation of `Extract to csv` button.
+///
+/// Its take [data] as List of `Sentence` and create `List<List<dynamic>>`
+/// from them and then convert it as `csv` and downloads it.
+/// Downloaded file will have [fileName].csv
+///
+///! Note: This function uses packages that only available on web.
+Future<void> extract(String? fileName, List data) async {
   List<List<dynamic>> rows = [];
   List<dynamic> row = [];
   row.add("Match");
