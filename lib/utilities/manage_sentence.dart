@@ -39,6 +39,8 @@ List<Widget> getSentence({
       index: 0,
       suggestion: suggestion,
       text: text,
+      mistakeTextStyle: mistakeTextStyle,
+      allTextStyle: allTextStyle,
     );
 
     return sentences;
@@ -68,6 +70,8 @@ List<Widget> getSentence({
         index: index,
         suggestion: suggestion,
         text: text,
+        mistakeTextStyle: mistakeTextStyle,
+        allTextStyle: allTextStyle,
       );
     } else {
       sentences.addAll(
@@ -124,13 +128,15 @@ void addHoverableWidget({
   suggestion,
   index,
   iconInfo,
+  mistakeTextStyle = mistakeSentence,
+  allTextStyle = allSentence,
 }) {
   sentences.add(HoverAbleWidget(
       child: Wrap(
         children: [
           ...splitSentence(
             text: error ?? text,
-            style: mistakeSentence,
+            style: mistakeTextStyle,
             space: !(index == 0 || text[index - 1] != ' '),
           ),
         ],
@@ -199,9 +205,7 @@ bool isMistake({
   } else if (index == 0 && suggestion == 'Using contractions') {
     // [error[n't]]
     return true;
-  } else if (index > 0 &&
-      lastSymbol == sLength &&
-      !isLetter(text[index - 1])) {
+  } else if (index > 0 && lastSymbol == sLength && !isLetter(text[index - 1])) {
     // [ error]
     return true;
   } else if (index > 0 &&
@@ -209,9 +213,7 @@ bool isMistake({
       suggestion == 'Using contractions') {
     // [[n't]error]
     return true;
-  } else if (index > 0 &&
-      lastSymbol < sLength &&
-      !isLetter(text[lastSymbol])) {
+  } else if (index > 0 && lastSymbol < sLength && !isLetter(text[lastSymbol])) {
     // [text error text]
     return true;
   } else if (index > 0 &&
