@@ -10,7 +10,6 @@ import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
 import '../style/colors.dart';
 import '../utilities/add_new_file.dart';
-import '../widgets/custom_loading.dart';
 import '../widgets/custom_toast.dart';
 import '../widgets/default_no_file.dart';
 import '../models/controller.dart';
@@ -171,9 +170,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   }
 
   Future uploadDropedFile(dynamic event) async {
-    SmartDialog.showLoading(builder: (context) {
-      return const CustomLoading();
-    });
+    SmartDialog.showLoading();
     final data = await controller.getFileData(event);
     setState(() => highlight = false);
 
@@ -212,9 +209,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   // when a user click to 'New file' button a user should be able to pick a file to upload
   // allowed extensions: pdf
   void _pickFiles() async {
-    SmartDialog.showLoading(builder: (context) {
-      return const CustomLoading();
-    });
+    SmartDialog.showLoading();
     try {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -257,9 +252,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   }
 
   void _changeFile(int id) {
-    SmartDialog.showLoading(builder: (context) {
-      return const CustomLoading();
-    });
+    SmartDialog.showLoading();
     var index = _getIndex(id: id);
     lastClick.add(id);
     setState(() => currentFile = index);
