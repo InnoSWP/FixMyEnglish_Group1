@@ -1,3 +1,4 @@
+import 'package:fix_my_english/widgets/custom_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         },
         builder: FlutterSmartDialog.init(
           toastBuilder: (msg) => CustomToast(msg: msg),
+          loadingBuilder: (msg) => const CustomLoading(),
         ),
       );
     });
