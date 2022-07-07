@@ -44,7 +44,7 @@ class MistakeSentence extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> l = getSentence(
       label: label,
-      text: text,
+      text: '• $text',
       context: context,
       error: error,
       suggestion: suggestion,
