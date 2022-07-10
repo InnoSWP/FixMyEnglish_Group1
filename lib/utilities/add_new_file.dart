@@ -1,18 +1,21 @@
 import 'package:fix_my_english/utilities/add_mistake_sentence.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../constants/constants.dart';
 import '../models/file.dart';
 import '../services/api_service.dart';
+import '../widgets/custom_toast.dart';
 import 'extension.dart';
 
 /// A function that add new [file] to [filesList].
-/// 
+///
 /// It takes [file] as `List<int>` and by using [PdfDocument] and [PdfTextExtractor]
 /// converts it into [String] and called [postText] with this [String].
 /// And then its gather all data from [postText] into one [List] and create a
 /// [File] with these data. Finally this [File] will be added into [filesList].
-/// 
+///
 /// If [filesList] is not provided it will take empty [List] by default.
 /// If [fileName] is not provided it will take [defaultFileName].
 /// To manipulate [filesList] it required to provide [currentFileId].
@@ -23,6 +26,17 @@ Future<void> addNewFile({
   required currentFileId,
   fileName = defaultFileName,
 }) async {
+  if (!allowedExtensions.contains(getExtension(fileName, dot: false))) {
+    SmartDialog.showToast('', alignment: Alignment.bottomCenter,
+        builder: (context) {
+      return const CustomToast(
+        msg: 'Unsupported file type.',
+        type: ToastType.warning,
+      );
+    });
+    return;
+  }
+
   PdfDocument document = PdfDocument(
     inputBytes: file,
   );
