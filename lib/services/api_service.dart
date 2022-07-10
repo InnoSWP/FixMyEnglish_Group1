@@ -9,8 +9,18 @@ import '../constants/constants.dart';
 import '../models/sentence.dart';
 import '../widgets/custom_toast.dart';
 
+/// Current state of API. It will be changed throughout the running time of a program.
 bool isAPIWorking = false;
 
+/// Create a parameters for `POST` query, and then connect to API and send this query.
+///
+/// API alocated at [apiUrl]. API returns `json` which is parsed and
+/// returned as `List<Sentence>` in [postText].
+///
+/// if [text] will be `empty` or null it will ignore this query.
+///
+/// if API is not working ypu can try Mock API by [connectMock]. It will give
+/// you predefined [apiSample]. Its helpful when you want to check something.
 Future<List<Sentence>> postText({
   text = '',
   context,
@@ -44,6 +54,9 @@ Future<List<Sentence>> postText({
   return sentenceList;
 }
 
+/// If query was sent successfully parse it and add new [Sentence] to [sentenceList].
+///
+/// But if `response.statusCode` is differs from `200`, it will throw an error.
 void acceptHandler(http.Response response, BuildContext? context,
     List sentenceList, text, connectMock) async {
   if (response.statusCode == 200) {
@@ -99,6 +112,7 @@ void acceptHandler(http.Response response, BuildContext? context,
   }
 }
 
+/// Query was not successfully, it will show an error.
 void errorHandler(onError, BuildContext? context) {
   isAPIWorking = false;
   SmartDialog.showToast(
@@ -113,6 +127,7 @@ void errorHandler(onError, BuildContext? context) {
   );
 }
 
+/// Its a Mock API which is send you random [Sentence] from [apiSample].
 Future<List<Sentence>> postTextSample({
   text = '',
   context,
@@ -133,6 +148,8 @@ Future<List<Sentence>> postTextSample({
       displayTime: const Duration(seconds: 1),
     );
   }
+
+  /// To simulate the real API :)
   await Future.delayed(const Duration(seconds: 2));
 
   List<Sentence> sentenceList = [];
