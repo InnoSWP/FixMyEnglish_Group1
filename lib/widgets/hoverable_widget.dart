@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
+/// A widget that gives you custom hoverable widget.
+///
+/// Wrap any other widget with [HoverAbleWidget] as its [child], and
+/// provide [builder] that returns a widget to show it when user hovers on [child].
+/// The [builder] widget will be rendered on top of any other widget using [OverlayEntry].
+/// Depending on [child] position, [builder] will be placed
+/// on top or left or bottom or right if its can.
+///
+/// See also:
+///   [Tooltip] - which is provided by Flutter team. Its almost same as [HoverAbleWidget], but instead of [builder] it has only [String].
 class HoverAbleWidget extends StatefulWidget {
   const HoverAbleWidget(
       {super.key, required this.child, required this.builder});
 
+  /// Widget that need to be hoverable.
   final Widget child;
+
+  /// On hover on [child] display widget provided by [builder].
   final Widget Function(BuildContext) builder;
   @override
   State<HoverAbleWidget> createState() => _HoverAbleWidgetState();
@@ -103,8 +114,8 @@ class _HoverAbleWidgetState extends State<HoverAbleWidget> {
         if (_isDialogOpen) _closeDialog(context);
       },
       child: Container(
-        child: widget.child,
         key: _key,
+        child: widget.child,
       ),
     );
   }

@@ -9,9 +9,23 @@ import '../constants/constants.dart';
 import '../models/sentence.dart';
 import '../widgets/custom_toast.dart';
 
+/// Current state of API. It will be changed throughout the running time of a program.
 bool isAPIWorking = false;
 
-Future<List<Sentence>> postText({text = '', context}) async {
+/// Create a parameters for `POST` query, and then connect to API and send this query.
+///
+/// API alocated at [apiUrl]. API returns `json` which is parsed and
+/// returned as `List<Sentence>` in [postText].
+///
+/// if [text] will be `empty` or null it will ignore this query.
+///
+/// if API is not working ypu can try Mock API by [connectMock]. It will give
+/// you predefined [apiSample]. Its helpful when you want to check something.
+Future<List<Sentence>> postText({
+  text = '',
+  context,
+  connectMock = true,
+}) async {
   if (text == null || text.isEmpty) {
     return [];
   }
@@ -27,23 +41,24 @@ Future<List<Sentence>> postText({text = '', context}) async {
       'Access-Control-Allow-Origin': '*',
     },
   ).then((r) {
-    acceptHandler(r, context, sentenceList, text);
+    acceptHandler(r, context, sentenceList, text, connectMock);
   }).catchError((e) async {
     errorHandler(e, context);
-    sentenceList.addAll((await postTextSample(
-      context: context,
-      text: text,
-    )));
+    if (connectMock) {
+      sentenceList.addAll((await postTextSample(
+        context: context,
+        text: text,
+      )));
+    }
   });
   return sentenceList;
 }
 
-void acceptHandler(
-  http.Response response,
-  BuildContext? context,
-  List sentenceList,
-  text,
-) async {
+/// If query was sent successfully parse it and add new [Sentence] to [sentenceList].
+///
+/// But if `response.statusCode` is differs from `200`, it will throw an error.
+void acceptHandler(http.Response response, BuildContext? context,
+    List sentenceList, text, connectMock) async {
   if (response.statusCode == 200) {
     if (!isAPIWorking) {
       SmartDialog.showToast(
@@ -59,14 +74,14 @@ void acceptHandler(
     }
     // success
     final body = jsonDecode(response.body) as List;
-    body.forEach((e) {
+    for (var e in body) {
       sentenceList.add(Sentence(
         label: e['label'] as String,
         text: e['sentence'] as String,
         suggestion: e['description'] as String,
         error: e['match'] as String,
       ));
-    });
+    }
   } else {
     SmartDialog.showToast(
       '',
@@ -79,10 +94,12 @@ void acceptHandler(
       },
     );
     isAPIWorking = false;
-    sentenceList.addAll((await postTextSample(
-      context: context,
-      text: text,
-    )));
+    if (connectMock) {
+      sentenceList.addAll((await postTextSample(
+        context: context,
+        text: text,
+      )));
+    }
   }
   if (sentenceList.isEmpty) {
     SmartDialog.showToast(
@@ -95,6 +112,7 @@ void acceptHandler(
   }
 }
 
+/// Query was not successfully, it will show an error.
 void errorHandler(onError, BuildContext? context) {
   isAPIWorking = false;
   SmartDialog.showToast(
@@ -107,10 +125,9 @@ void errorHandler(onError, BuildContext? context) {
       );
     },
   );
-
-  print('Error: $onError');
 }
 
+/// Its a Mock API which is send you random [Sentence] from [apiSample].
 Future<List<Sentence>> postTextSample({
   text = '',
   context,
@@ -131,6 +148,8 @@ Future<List<Sentence>> postTextSample({
       displayTime: const Duration(seconds: 1),
     );
   }
+
+  /// To simulate the real API :)
   await Future.delayed(const Duration(seconds: 2));
 
   List<Sentence> sentenceList = [];

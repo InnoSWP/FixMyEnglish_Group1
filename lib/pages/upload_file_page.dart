@@ -1,31 +1,67 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import '../style/fix_text_page/decorations.dart';
+
+import '../style/decorations.dart';
 import '../style/text_style.dart';
 import '../style/upload_file_page/text_style.dart';
 import '../style/colors.dart';
-import '../widgets/custom_loading.dart';
+import '../utilities/add_new_file.dart';
 import '../widgets/custom_toast.dart';
 import '../widgets/default_no_file.dart';
 import '../models/controller.dart';
 import '../widgets/file_list.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/mistake_sentence.dart';
 import '../widgets/my_button.dart';
-import '../models/simple_dialog.dart';
 import '../widgets/mistake_list.dart';
 import '../models/file.dart';
 import '../widgets/default_file_list.dart';
 import '../utilities/extract.dart';
 import '../constants/constants.dart';
-import '../utilities/extension.dart';
-import '../services/api_service.dart';
 import '../utilities/last_clicked_file.dart';
 
+/// ### The Upload Page of [FixMyEnglish](https://fix-my-english-c6270.web.app/#/upload_file).
+///
+/// Upload page consist of [MistakeList] and [FileListView].
+///
+/// [FileListView] - is where you can upload your files.
+/// There are two ways to upload files.
+/// 1. By `Upload More` button or `Add pdf` if its first file:
+///     - By clicking one of these buttons you will be able to pick a file or files if [allowMultipleFileUpload] enabled.
+/// You can only upload files with extensions listed in [allowedExtensions].
+///
+/// 2. By Drag and Drop
+///     - To upload new file its enough to drag and drop it into website. if [allowDragAndDrop] option is enabled.
+/// You can only Drag and drop files with extensions listed in [allowedExtensions]. Otherwise you will get a warning.
+///
+///
+/// [MistakeList] - list of mistakes received from API, it will show all mistakes and
+/// by hover on error phrases there appears a box where you see a description for an error.
+/// if you think that error that was provided by API is wrong(false-positive) you can send
+/// report by clicking red button near each sentence.
+///
+/// #### Toasts(Message, Notification) that you can get:
+/// 1. INFO - type
+///   - `Connected to API` - successfully connected to the API, congratulations!
+///   - `No mistake found!` - Your text was sent to API, and API didn't detect any mistakes, lucky you!
+///   - `Report sent, thanks!` - Your report was successfully recorded to FireStore, thanks again :)
+/// 2. WARNING - type
+///   - `Unsupported file type.` - Uploaded a file which is not supported. i.e not listed in [allowedExtensions].
+///   - `Connected to Mock API` - Connected to Mock API which is only for displaying some predefined data,
+/// you can disable it in [addNewFile] pass parameter `connectMock:false` in postText() function.
+/// 3. ERROR - type
+///   - `Wrong platform chosen!` - Can't use [FilePicker] in this platform.
+///   - `Can't upload file(s)!` - Something went wrong while picking files.
+///   - `Failed to connect to API` - API is not available or there is some other problem with API or hosting.
+///   - `No reason for bug provided` - Trying to send a report which has no reason.
+///   - `Failed with status code: $statusCode!` - Trying connect to API, but API sent statusCode different from `200`.
+///   - `Denied, you made such report!` - if you are trying to send report which is similar to one of [saveNReports] last reports.
+///   - `Denied, too many reports!` - if your difference between your two last reports is less than [limitToMakeQueryDB] milliseconds.
+///   - `Failed to record your report!` - if something will go wrong while trying to send your report to firebase
+///   - `Can't find provided label!` - if API sent a label which is not add in [labelToIconAsset].
 class UploadFilePage extends StatefulWidget {
   static const pageName = '/upload_file';
   final myController = MyController(TextEditingController());
@@ -36,26 +72,40 @@ class UploadFilePage extends StatefulWidget {
 }
 
 class _UploadFilePageState extends State<UploadFilePage> {
+  /// List of files which is used in [FileListView].
   static final files = [
     File(name: 'emptyFile', id: 0),
   ];
+
+  /// It's for Drag and Drop. when draged file is onHover on [FileListView] colors will change.
   bool highlight = false;
+
+  /// Current file id which is displayed in [MistakeList].
   int currentFile = 0;
+
+  /// Next ids for a file. Incrementing each time to have unique ids.
   int currentFileId = 1;
+
+  /// List of last clicked `id` of files. To better navigate to between files.
   LastClick lastClick = LastClick();
+
+  /// Controller for [DropzoneView].
   late DropzoneViewController controller;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getAppBar(),
+      backgroundColor: backgroundPageColor,
       body: Stack(
         children: [
-          DropzoneView(
-            onCreated: (DropzoneViewController ctrl) => controller = ctrl,
-            onHover: () => setState(() => highlight = true),
-            onLeave: () => setState(() => highlight = false),
-            onDrop: UploadedFile,
-          ),
+          if (kIsWeb && allowDragAndDrop)
+            DropzoneView(
+              onCreated: (DropzoneViewController ctrl) => controller = ctrl,
+              onHover: () => setState(() => highlight = true),
+              onLeave: () => setState(() => highlight = false),
+              onDrop: uploadDropedFile,
+            ),
           Column(
             children: [
               const Divider(color: colorPrimaryRedCaramel, height: 3),
@@ -93,8 +143,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                       child: FileListView(
                                         currentFile: files[currentFile].id,
                                         files: files.sublist(1),
-                                        removeFile: removeFile,
-                                        changeFile: changeFile,
+                                        removeFile: _removeFile,
+                                        changeFile: _changeFile,
                                       ),
                                     ),
                                   ),
@@ -114,7 +164,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                                 Image.asset(
                                                   "assets/icons/add_file_button.png",
                                                   color: highlight
-                                                      ? const Color(0xFF82490D)
+                                                      ? onHoverDragDropButton
                                                       : backgroundButton,
                                                 ),
                                                 const Text(
@@ -130,7 +180,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                                                     Radius.circular(16.0)),
                                             width: 200,
                                             color: highlight
-                                                ? const Color(0xFF82490D)
+                                                ? onHoverDragDropButton
                                                 : backgroundButton,
                                             child: Row(
                                                 mainAxisAlignment:
@@ -170,125 +220,69 @@ class _UploadFilePageState extends State<UploadFilePage> {
     );
   }
 
-  Future UploadedFile(dynamic event) async {
-    final name = event.name;
+  /// Function for uploading new files through Drag and Drop functionality.
+  Future uploadDropedFile(dynamic event) async {
+    SmartDialog.showLoading();
     final data = await controller.getFileData(event);
-    print('Name : $name');
+    setState(() => highlight = false);
 
-    //widget.onDroppedFile(droppedFile);
-    setState(() {
-      highlight = false;
-    });
-
-    //////////
-    ///
-    ///
-
-    PdfDocument document = PdfDocument(
-      inputBytes: data,
-    );
-    PdfTextExtractor extractor = PdfTextExtractor(document);
-
-    String text = extractor.extractText();
-
-    List mistakeSentences = [];
-    postText(
-      text: text,
+    await addNewFile(
+      file: data,
       context: context,
-    ).then((l) {
-      for (var e in l) {
-        mistakeSentences.add(MistakeSentence(
-          label: e.label,
-          suggestion: e.suggestion,
-          text: e.text,
-          error: e.error,
-        ));
-      }
-    });
-    setState(() {
-      files.add(File(
-        id: currentFileId++,
-        name: removeExtension(event.name),
-        mistakeSentences: mistakeSentences,
-      ));
-    });
+      currentFileId: currentFileId++,
+      fileName: event.name,
+      filesList: files,
+    );
+    SmartDialog.dismiss();
+    setState(() {});
   }
 
-  void removeFile({int? id, File? file}) {
+  /// Remove a file from [files] by its [id] or [file] itself.
+  void _removeFile({int? id, File? file}) {
     if (file != null && files.contains(file)) {
       lastClick.remove(file.id);
       setState(() {
         files.remove(file);
-        currentFile = getIndex(id: lastClick.getId());
+        currentFile = _getIndex(id: lastClick.getId());
       });
-      print('file with id: ${file.id} removed!');
     } else if (id != null) {
       for (var filei in files) {
         if (filei.id == id) {
           lastClick.remove(id);
           setState(() {
             files.remove(filei);
-            currentFile = getIndex(id: lastClick.getId());
+            currentFile = _getIndex(id: lastClick.getId());
           });
-          print('file with id: $id removed!');
           break;
         }
       }
-    } else {
-      print('can\'t remove file');
     }
   }
 
-  // when a user click to 'New file' button a user should be able to pick a file to upload
-  // allowed extensions: pdf
+  /// Function for uploading new files through `Upload More` button.
+  ///
+  /// Only files with [allowedExtensions] are allowed.
+  /// To prohibit Multiple File unable [allowMultipleFileUpload].
   void _pickFiles() async {
-    SmartDialog.showLoading(builder: (context) {
-      return const CustomLoading();
-    });
+    SmartDialog.showLoading();
     try {
       var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: allowedExtensions,
-        allowMultiple: true,
+        allowMultiple: allowMultipleFileUpload,
       );
       if (result != null && result.files.isNotEmpty) {
         for (final file in result.files) {
-          PdfDocument document = PdfDocument(
-            inputBytes: file.bytes,
-          );
-          PdfTextExtractor extractor = PdfTextExtractor(document);
-
-          String text = extractor.extractText();
-
-          List mistakeSentences = [];
-          postText(
-            text: text,
+          await addNewFile(
+            file: file.bytes,
             context: context,
-          ).then((l) {
-            for (var e in l) {
-              mistakeSentences.add(MistakeSentence(
-                label: e.label,
-                suggestion: e.suggestion,
-                text: e.text,
-                error: e.error,
-              ));
-            }
-          });
-          files.add(File(
-            id: currentFileId++,
-            name: removeExtension(file.name),
-            mistakeSentences: mistakeSentences,
-          ));
+            currentFileId: currentFileId++,
+            filesList: files,
+            fileName: file.name,
+          );
         }
-      } else {
-        // user closed file dialog
       }
-    } on PlatformException catch (e) {
-      // showMyNotification(
-      //   context: context,
-      //   error: 'Error(PlatformException)',
-      //   text: e,
-      // );
+    } on PlatformException {
       SmartDialog.showToast(
         '',
         alignment: Alignment.bottomCenter,
@@ -298,16 +292,11 @@ class _UploadFilePageState extends State<UploadFilePage> {
         ),
       );
     } catch (e) {
-      // showMyNotification(
-      //   context: context,
-      //   error: 'Error',
-      //   text: e,
-      // );
       SmartDialog.showToast(
         '',
         alignment: Alignment.bottomCenter,
         builder: (context) => const CustomToast(
-          msg: 'Can\'t upload files!',
+          msg: 'Can\'t upload file(s)!',
           type: ToastType.error,
         ),
       );
@@ -317,19 +306,19 @@ class _UploadFilePageState extends State<UploadFilePage> {
     return;
   }
 
-  void changeFile(int id) {
-    SmartDialog.showLoading(builder: (context) {
-      return const CustomLoading();
-    });
-    var index = getIndex(id: id);
+  /// By clicking on any files, page content should be changed.
+  void _changeFile(int id) {
+    SmartDialog.showLoading();
+    var index = _getIndex(id: id);
     lastClick.add(id);
-    setState(() {
-      currentFile = index;
-    });
+    setState(() => currentFile = index);
     SmartDialog.dismiss();
   }
 
-  int getIndex({File? file, int? id}) {
+  /// Get index of a certain file in [files].
+  ///
+  /// For [_getIndex] you can pass [file] itself or [id] of a file.
+  int _getIndex({File? file, int? id}) {
     if (file != null && files.contains(file)) {
       return files.indexOf(file);
     } else if (id != null) {

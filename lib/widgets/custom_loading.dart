@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// A widget that shows animated loading image.
+///
+/// This Widget creates [Container] with some decorations
+/// and on top of it displays a animated loading image
 class CustomLoading extends StatefulWidget {
   const CustomLoading({super.key});
 

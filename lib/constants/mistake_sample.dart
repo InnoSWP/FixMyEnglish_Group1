@@ -1,7 +1,9 @@
 import '../models/sentence.dart';
 
+/// If API isn't working then connect to Mock API and show [numberSamplePerPage] samples.
 const numberSamplePerPage = 10;
 
+/// List of samples that Mock API will use.
 final List<Sentence> apiSample = [
   Sentence(
     label: 'SPOKN1',

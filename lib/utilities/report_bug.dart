@@ -1,17 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../models/controller.dart';
-import '../models/simple_dialog.dart';
 import '../style/colors.dart';
-import '../style/fix_text_page/button_style.dart';
 import '../style/text_style.dart';
 import '../widgets/mistake_sentence.dart';
 import '../widgets/my_button.dart';
 import '../widgets/text_field.dart';
 import 'add_report_firestore.dart';
 
+/// Show dialog to be able report a bug for a certain [sentence].
+///
+/// [reportBug] simply calls [showDialog] with [AlertDialog] and with some
+/// decorations.
+///
+/// [reportBug] dialog consist of:
+///   1. [sentence] itself with hoverable error.
+///   2. [MyTextField] to write your feedback for this [sentence].
+///   3. [MyButton] called `Send report` to send feedback to FireStore by [addReport]
 void reportBug(MistakeSentence sentence, {required BuildContext context}) {
   // creating new sentence with small font size
   MistakeSentence smallFontSizeSentence = MistakeSentence(
@@ -23,6 +28,7 @@ void reportBug(MistakeSentence sentence, {required BuildContext context}) {
     mistakeTextStyle: smallMistakeSentence,
   );
 
+  // Controller for feedback TexField.
   final MyController myController =
       MyController(TextEditingController(text: ''));
 

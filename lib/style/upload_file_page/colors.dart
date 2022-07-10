@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// Linear Gradient Color, that starts from topCenter and ends bottomCenter.
+///
+/// Usage:
+///   Selected file in FileListView in Upload File Page.
 const LinearGradient fileInfoLinearGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,

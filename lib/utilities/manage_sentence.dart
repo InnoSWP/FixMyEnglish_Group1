@@ -1,14 +1,22 @@
-import 'package:fix_my_english/utilities/report_bug.dart';
-import 'package:fix_my_english/widgets/hoverable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:sizer/sizer.dart';
 
 import '../constants/constants.dart';
 import '../style/text_style.dart';
 import '../widgets/custom_toast.dart';
+import 'add_new_hoverable_widget.dart';
+import 'is_mistake.dart';
+import 'split_sentence.dart';
 
-bool dot = false;
+/// Converts given [text] into `List<Widget>` where hover on [error] cause [suggestion] appearance.
+///
+/// A valid [label] must be specified, otherwise [getSentence] will show an error.
+///
+/// If you will pass [error] as empty [String]. [getSentence] will consider the whole [text] as error.
+/// If you will pass [error] as `null`. [getSentence] won't create any [HoverableWidget]. i.e no error exists.
+///
+/// To customize your text output use [mistakeTextStyle] for [erorr]
+/// and [allTextStyle] for [text].
 List<Widget> getSentence({
   label,
   required String text,
@@ -18,7 +26,6 @@ List<Widget> getSentence({
   mistakeTextStyle = mistakeSentence,
   allTextStyle = allSentence,
 }) {
-  dot = true;
   List<Widget> sentences = [];
   if (!labelToIconAsset.containsKey(label)) {
     SmartDialog.showToast(
@@ -32,6 +39,8 @@ List<Widget> getSentence({
     return sentences;
   }
   var iconInfo = labelToIconAsset[label];
+
+  // if error is empty it mean, that all [text] has a problem
   if (error == '') {
     addHoverableWidget(
       sentences: sentences,
@@ -40,6 +49,8 @@ List<Widget> getSentence({
       index: 0,
       suggestion: suggestion,
       text: text,
+      mistakeTextStyle: mistakeTextStyle,
+      allTextStyle: allTextStyle,
     );
 
     return sentences;
@@ -69,6 +80,8 @@ List<Widget> getSentence({
         index: index,
         suggestion: suggestion,
         text: text,
+        mistakeTextStyle: mistakeTextStyle,
+        allTextStyle: allTextStyle,
       );
     } else {
       sentences.addAll(
@@ -90,144 +103,4 @@ List<Widget> getSentence({
     ));
   }
   return sentences;
-}
-
-List prohibitedSymbols = ['\n'];
-List<Widget> splitSentence({
-  required String text,
-  String del = ' ',
-  style,
-  space = true,
-}) {
-  List<Widget> sentences = [];
-  var splitted = text.split(del);
-  for (var word in splitted) {
-    // clearing prohibited symbols
-    for (var c in prohibitedSymbols) {
-      word = word.replaceAll(c, '');
-    }
-
-    sentences.add(Text(
-      (dot ? '• ' : (space ? ' ' : '')) + word,
-      style: style,
-    ));
-    space = true;
-    dot = false;
-  }
-
-  return sentences;
-}
-
-void addHoverableWidget({
-  required List sentences,
-  text,
-  error,
-  suggestion,
-  index,
-  iconInfo,
-}) {
-  sentences.add(HoverAbleWidget(
-      child: Wrap(
-        children: [
-          ...splitSentence(
-            text: error ?? text,
-            style: mistakeSentence,
-            space: !(index == 0 || text[index - 1] != ' '),
-          ),
-        ],
-      ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                children: [
-                  Image.asset(
-                    iconInfo!["link"] as String,
-                    height: (iconInfo["height"] as double).h,
-                    width: (iconInfo["width"] as double).w,
-                  ),
-                  Expanded(
-                    child: Text(suggestion,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        )),
-                  )
-                ],
-              ),
-              const Expanded(
-                child: Text(
-                  "We will help you to solve your problem SOON",
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              )
-            ],
-          ),
-        );
-      }));
-}
-
-bool isMistake({
-  text,
-  error,
-  index,
-  suggestion,
-}) {
-  int s_length = text.length;
-  int last_symbol = index + (error.length); // not including last)
-  if (index == 0 && last_symbol == s_length) {
-    // [error]
-    return true;
-  } else if (index == 0 && !isLetter(text[last_symbol])) {
-    // [error text]
-    return true;
-  } else if (index == 0 && suggestion == 'Using contractions') {
-    // [error[n't]]
-    return true;
-  } else if (index > 0 &&
-      last_symbol == s_length &&
-      !isLetter(text[index - 1])) {
-    // [ error]
-    return true;
-  } else if (index > 0 &&
-      last_symbol == s_length &&
-      suggestion == 'Using contractions') {
-    // [[n't]error]
-    return true;
-  } else if (index > 0 &&
-      last_symbol < s_length &&
-      !isLetter(text[last_symbol])) {
-    // [text error text]
-    return true;
-  } else if (index > 0 &&
-      last_symbol < s_length &&
-      suggestion == 'Using contractions') {
-    // [text errorn't text]
-    return true;
-  }
-  return false;
-}
-
-bool isLetter(String s) {
-  if (s.length != 1) {
-    return false;
-  }
-  int c = s.codeUnitAt(0);
-  return (c >= 0x41 && c <= 0x5A) || (c >= 0x61 && c <= 0x7A);
 }

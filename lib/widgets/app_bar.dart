@@ -1,50 +1,33 @@
 import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
+import '../style/colors.dart';
 import './bulk_upload.dart';
 
+/// Custom [AppBar] with predefined data.
+///
+/// predefined data:
+/// 1. logo of application from [logoPath]
+/// 2. custom button [BulkUploadButton] to navigate to Upload Page (display only if [actions] = true)
 AppBar getAppBar({
-  backgroundColor = Colors.white,
+  backgroundColor = appBarBackground,
   title,
   elevation = 0,
   actions = false,
+  logoWidth = 200,
 }) {
-  title ??= getLogo();
   return AppBar(
-    iconTheme: IconThemeData(color: Colors.black),
+    iconTheme: const IconThemeData(color: Colors.black),
     elevation: elevation,
     backgroundColor: backgroundColor,
-    title: title,
-    actions: (actions ? [BulkUploadButton()] : null),
-  );
-}
-
-Widget getLogo({
-  width = 200,
-  image,
-}) {
-  image ??= getImage(
-    message: 'trying to get Logo',
-    path: logoPath,
-    width: width,
-  );
-  return Container(
-    alignment: Alignment.topLeft,
-    child: image,
-  );
-}
-
-Image getImage({
-  message,
-  required path,
-  width,
-}) {
-  return Image(
-    image: AssetImage(path),
-    color: Color(0xFF864921),
-    width: width,
-    errorBuilder:
-        (BuildContext context, Object exception, StackTrace? stackTrace) =>
-            Text('error: [$message] not found!'),
+    title: Container(
+      alignment: Alignment.topLeft,
+      child: Image(
+        image: const AssetImage(logoPath),
+        color: appBarIconBackground,
+        width: logoWidth,
+      ),
+    ),
+    actions: (actions ? [const BulkUploadButton()] : null),
   );
 }

@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../models/controller.dart';
 
+/// A widget to display a custom [TextField].
+///
+/// [MyTextField] accepts [text] and [myController] to display default text in [MyTextField].
+/// if [myController] is null, it tries to take text from [text], which is by deafult empty [String].
 class MyTextField extends StatelessWidget {
-  final int maxLines;
-  final String? text;
-  final MyController? myController;
-  final double borderRadius;
-  final bool? filled;
-  final Color? filledColor;
-  final String hintText;
-  final bool readOnly;
   const MyTextField({
     this.maxLines = 10,
     this.text = '',
@@ -22,6 +18,23 @@ class MyTextField extends StatelessWidget {
     this.hintText = 'Enter text here...',
     this.readOnly = false,
   });
+
+  /// Text to place inside [MyTextField] by deafult.
+  final String? text;
+
+  /// Border radius of [MyTextField].
+  final double borderRadius;
+
+  /// Controller of [MyTextField].
+  ///
+  /// if its null there are will be created new [myController] with [text] inside of it.
+  final MyController? myController;
+
+  final int maxLines;
+  final bool? filled;
+  final Color? filledColor;
+  final String hintText;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {

@@ -5,12 +5,24 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../constants/constants.dart';
 import '../models/report.dart';
 import '../models/report_date.dart';
-import '../style/fix_text_page/text_style.dart';
 import '../widgets/custom_toast.dart';
 import '../widgets/mistake_sentence.dart';
 
+/// Last [saveNReports] report you made.
 List<ReportDate> lastReports = [];
 
+/// Add new report to FireStore.
+///
+/// [addReport] takes [sentence] and [reason] combine them into [Report].
+/// And sent this [Report] to FireStore database.
+///
+/// There are some limitations before [addReport] will add your [Report] to FireStore:
+///   1. Your feedback section should not be empty. if [reason] is empty your query will be denied.
+///   2. You can't send two exactly same [Report]. This program will store your
+/// last [saveNReports] reports. And if it finds that your new [Report] match any of them
+/// it will deny your query.
+///   3. Difference between two last [Report]s should be at least [limitToMakeQueryDB] milliseconds.
+/// With [Report] this program also store date when you made it.
 void addReport(MistakeSentence sentence, String reason) {
   if (reason.isEmpty) {
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
@@ -75,7 +87,6 @@ void addReport(MistakeSentence sentence, String reason) {
       return const CustomToast(msg: 'Report sent, thanks!');
     });
   }).catchError((error) {
-    print('Failed: $error');
     SmartDialog.showToast('', alignment: Alignment.bottomCenter,
         builder: (context) {
       return const CustomToast(
@@ -83,6 +94,7 @@ void addReport(MistakeSentence sentence, String reason) {
         type: ToastType.error,
       );
     });
+    lastReports.removeLast();
   });
 }
 

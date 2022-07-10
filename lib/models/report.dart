@@ -1,9 +1,11 @@
+/// A class that represents a single user report.
+///
+/// [Report] consist of [sentence], [match], [description], [label] and [reason]
+/// [Report] has static method [fromJson], thats convert given `Map<String, Object>`
+/// to type [Report] and return it.
+/// You can convert any report to Json by [toJson], it will return a `Map<String, Object>`
+/// with all fields of [Report].
 class Report {
-  String sentence;
-  String match;
-  String description;
-  String label;
-  String reason;
   Report({
     required this.label,
     required this.sentence,
@@ -12,6 +14,22 @@ class Report {
     required this.reason,
   });
 
+  /// [sentence] that has `false-positive` error
+  String sentence;
+
+  /// error that seems to be incorrect(`false-positive`)
+  String match;
+
+  /// [description] of [match](error)
+  String description;
+
+  /// type of [match]
+  String label;
+
+  /// [reason] why this [Report] was created
+  String reason;
+
+  /// Converts [Report] to `Map<String, Object>`.
   Map<String, Object> toJson() {
     return <String, Object>{
       'match': match,
@@ -22,6 +40,7 @@ class Report {
     };
   }
 
+  /// Converts given `Map<String, Object>` to [Report].
   static Report fromJson(Map<String, Object> data) {
     return Report(
       label: data['label'] as String,

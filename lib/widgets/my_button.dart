@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../style/fix_text_page/button_style.dart';
+import '../style/button_style.dart';
 
+/// A widget to diplay custom button, it's same as [ElevatedButton].
+///
+/// This button create good looking background for your button.
+/// And also good [gradient] options for background.
+/// Inside of [MyButton] can be any widget, just pass it as [child].
+/// [child] widget should not exceed [height] and [width] of [MyButton].
+/// To enable [MyButton] provide [onPressed] function and it should not be `null`.
 class MyButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final double? width;
-  final double height;
-  final Widget child;
-  final BorderRadiusGeometry? borderRadius;
-  final Gradient? gradient;
-  final ButtonStyle? style;
-  final Color? color;
-  final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
-  final AlignmentGeometry? alignment;
-  final BoxBorder? border;
   const MyButton({
     super.key,
     this.onPressed,
@@ -30,6 +25,37 @@ class MyButton extends StatelessWidget {
     this.alignment,
     this.border,
   });
+
+  /// Call [onPressed] when [MyButton] clicked.
+  final VoidCallback? onPressed;
+
+  /// Width of [MyButton] in [double].
+  final double? width;
+
+  /// Height of [MyButton] in [double] by default its `50.0`.
+  final double height;
+
+  /// A widget inside the [MyButton].
+  final Widget child;
+
+  /// Border radiues for background of [MyButton].
+  final BorderRadiusGeometry? borderRadius;
+
+  /// Gradient for background of [MyButton].
+  final Gradient? gradient;
+
+  /// Style of [MyButton], if [style] not provided [style] will be [gradientButtonStyle].
+  final ButtonStyle? style;
+
+  /// Background color of [MyButton].
+  final Color? color;
+
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final AlignmentGeometry? alignment;
+
+  /// Border of [MyButton] which extends [BoxBorder], used in [BoxDecoration].
+  final BoxBorder? border;
 
   @override
   Widget build(BuildContext context) {
