@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/fix_text_page/button_style.dart';
+import '../style/button_style.dart';
 
 /// A widget to diplay custom button, it's same as [ElevatedButton].
 ///
