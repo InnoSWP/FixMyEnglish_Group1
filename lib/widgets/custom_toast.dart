@@ -74,7 +74,7 @@ class CustomToast extends StatelessWidget {
           Image.asset("assets/icons/info_icon_report.png",
               height: 30, width: 30),
           const SizedBox(width: 10),
-          Text(msg, style: successToast),
+          Text(msg, style: toastTextStyle),
         ],
       ),
     );
@@ -95,7 +95,7 @@ class CustomToast extends StatelessWidget {
           Image.asset("assets/icons/warning_icon_report.png",
               height: 30, width: 30),
           const SizedBox(width: 10),
-          Text(msg, style: warningToast),
+          Text(msg, style: toastTextStyle),
         ],
       ),
     );
@@ -116,7 +116,7 @@ class CustomToast extends StatelessWidget {
           Image.asset("assets/icons/error_icon_report.png",
               height: 30, width: 30),
           const SizedBox(width: 10),
-          Text(msg, style: errorToast),
+          Text(msg, style: toastTextStyle),
         ],
       ),
     );
