@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/file.dart';
 import '../style/colors.dart';
 import '../style/text_style.dart';
-import '../style/upload_file_page/button_style.dart';
+import '../style/upload_file_page/colors.dart';
 import 'my_button.dart';
 
 /// A widget to display some information of a single file.
